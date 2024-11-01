@@ -1,3 +1,3 @@
-# Title
+# Etherium
 
-## Subtitle
+### [Магия](data/magic/magic.md)
