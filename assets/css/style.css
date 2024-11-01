@@ -100,11 +100,11 @@ main {
     }
 
     a {
-        color: #773939;
+        color: #7e1010;
         text-decoration: none;
         border-bottom: 1px dashed;
         &:hover {
-            color: #632929;
+            color: #a91515;
         }
     }
 }
@@ -128,10 +128,12 @@ footer p {
 
 .colored-box {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     margin-right: 5px;
     vertical-align: middle;
+    border-radius: 3px;
+    margin-top: -4px;
 }
 
 /* Responsive design */
