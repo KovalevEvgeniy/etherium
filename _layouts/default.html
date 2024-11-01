@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ("Etherium" + " | " + page.title) | default: "Etherium" }}</title>
-    <link rel="stylesheet" href="{{ '/etherium/assets/css/style.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
 <header>
     <div class="container">
         <h1>{{ page.title }}</h1>
         <nav>
-            <a href="{{ '/etherium/' | relative_url }}">Главная</a>
-            <a href="{{ '/etherium/magic' | relative_url }}">Магия</a>
-            <a href="{{ '/etherium/changelog' | relative_url }}">Changelog</a>
+            <a href="{{ '/' | relative_url }}">Главная</a>
+            <a href="{{ '/data/magic/' | relative_url }}">Магия</a>
+            <a href="{{ '/changelog' | relative_url }}">Changelog</a>
         </nav>
     </div>
 </header>
