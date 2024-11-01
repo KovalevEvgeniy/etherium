@@ -1,3 +1,16 @@
 title: "Etherium"
 markdown: kramdown
 theme: jekyll-theme-cayman
+
+colors:
+  sun: "#ff9f0e"
+  lilac: "#816fa5"
+  pink: "#FF69B4"
+  dark: "#18052c"
+  azure: "#07a3e6"
+  clear: "#FFFFFF"
+  golden: "#ffcd04"
+  radiant: "#ffff93"
+  emerald: "#05b1a0"
+  crimson: "#d10f2d"
+  green: "#0ab320"
