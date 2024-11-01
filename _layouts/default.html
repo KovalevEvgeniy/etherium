@@ -2,24 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ("Etherium" + " | " + page.title) | default: "Etherium" }}</title>
+    <link rel="stylesheet" href="{{ '/etherium/assets/css/style.css' | relative_url }}">
 </head>
 <body>
 <header>
-    <h1>{{ site.title }}</h1>
-    <nav>
-        <a href="/">Главная</a>
-        <a href="/docs">Документация</a>
-        <!-- Добавьте ссылки на важные разделы -->
-    </nav>
+    <div class="container">
+        <h1>{{ page.title }}</h1>
+        <nav>
+            <a href="{{ '/etherium/' | relative_url }}">Главная</a>
+            <a href="{{ '/etherium/magic' | relative_url }}">Магия</a>
+            <a href="{{ '/etherium/changelog' | relative_url }}">Changelog</a>
+        </nav>
+    </div>
 </header>
 
 <main>
-    {{ content }}
+    <div class="container">
+        <div class="island">
+            {{ content }}
+        </div>
+    </div>
 </main>
 
 <footer>
-    <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
+    <p>&copy; {{ "now" | date: "%Y" }} Etherium <strong>0.1.0</strong></p>
+    <p>Powered by GitHub Pages</p>
 </footer>
 </body>
 </html>
