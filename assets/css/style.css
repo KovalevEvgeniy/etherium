@@ -107,9 +107,14 @@ main {
             color: #a91515;
         }
     }
+
+    ul {
+        padding-left: 20px;
+        line-height: 1.2;
+    }
 }
 
-main p, main li {
+main p {
     font-size: 1em;
     margin-bottom: 10px;
 }

@@ -12,7 +12,10 @@
         <h1>{{ page.title }}</h1>
         <nav>
             <a href="{{ '/' | relative_url }}">Главная</a>
+            <a href="{{ '/data/levels/' | relative_url }}">Уровни</a>
             <a href="{{ '/data/magic/' | relative_url }}">Магия</a>
+            <a href="{{ '/data/gods/' | relative_url }}">Боги</a>
+            <a href="{{ '/data/homebrew/' | relative_url }}">Хоумбрю</a>
             <a href="{{ '/changelog' | relative_url }}">Changelog</a>
         </nav>
     </div>
@@ -27,7 +30,7 @@
 </main>
 
 <footer>
-    <p>&copy; {{ "now" | date: "%Y" }} Etherium <strong>0.1.0</strong></p>
+    <p>&copy; {{ "now" | date: "%Y" }} Etherium <strong>0.2.0</strong></p>
     <p>Powered by GitHub Pages</p>
 </footer>
 </body>
