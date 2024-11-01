@@ -69,12 +69,16 @@ main {
 
     em {
         font-style: italic;
-        color: #905b5b;
+        color: #a85959;
     }
 
     strong {
         font-weight: bold;
-        color: #370808;
+        color: #000;
+    }
+
+    del {
+        opacity: .5;
     }
 
     h1 {
@@ -106,6 +110,10 @@ main {
         &:hover {
             color: #a91515;
         }
+    }
+
+    a.external::after {
+        content: "↗"
     }
 
     ul {
