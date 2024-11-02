@@ -34,16 +34,16 @@ body {
 /* Header styling */
 header {
     text-align: center;
-    padding: 20px 0;
+    padding: 10px 0;
     background-color: #773939;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 header h1 {
     margin: 0;
     font-size: 2em;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 nav {
@@ -65,7 +65,8 @@ nav a:hover {
 }
 
 /* Main content styling */
-main {
+.main {
+    position: relative;
 
     em {
         font-style: italic;
@@ -116,9 +117,20 @@ main {
         content: "↗"
     }
 
-    ul {
+    ul, ol {
         padding-left: 20px;
         line-height: 1.2;
+    }
+
+    th, td {
+        padding: 5px;
+        font-size: .9em;
+    }
+
+    hr {
+        border: 0;
+        border-top: 1px solid #632828;
+        margin: 40px 0;
     }
 }
 
@@ -127,16 +139,22 @@ main p {
     margin-bottom: 10px;
 }
 
-/* Footer styling */
-footer {
+.footer {
     text-align: center;
     margin-top: 30px;
     font-size: 0.9em;
     color: #666;
-}
-
-footer p {
-    margin: 5px;
+    p {
+        margin: 5px;
+    }
+    a {
+        color: #666;
+        text-decoration: none;
+        border-bottom: 1px dashed;
+        &:hover {
+            color: #333;
+        }
+    }
 }
 
 .colored-box {
@@ -166,5 +184,41 @@ footer p {
     nav a {
         padding: 8px;
         font-size: 0.9em;
+    }
+}
+
+.result {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #37343f;
+    display: none;
+
+
+    li {
+        list-style: none;
+        padding: 10px;
+        background-color: #cdcac5;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .highlight {
+        background-color: #FFFFFF;
+    }
+}
+
+.search {
+    margin-bottom: 10px;
+    input {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        &:focus {
+            outline: none;
+        }
     }
 }

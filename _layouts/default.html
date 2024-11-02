@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ("Etherium" + " | " + page.title) | default: "Etherium" }}</title>
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <script src="{{ '/assets/js/script.js' | relative_url }}" defer></script>
 </head>
 <body>
 <header>
@@ -17,21 +18,41 @@
             <a href="{{ '/data/gods/' | relative_url }}">Боги</a>
             <a href="{{ '/data/homebrew/' | relative_url }}">Хоумбрю</a>
             <a href="{{ '/data/glossary/' | relative_url }}">Глоссарий</a>
-            <a href="{{ '/changelog' | relative_url }}">Changelog</a>
         </nav>
     </div>
 </header>
 
-<main>
+<div class="search">
+    <div class="container">
+        <form action="{{ '/search' | relative_url }}" method="get">
+            <input type="search" name="search" placeholder="Поиск...">
+            <!--                <button type="submit">Найти</button>-->
+        </form>
+    </div>
+</div>
+
+<main class="main">
+
     <div class="container">
         <div class="island">
             {{ content }}
         </div>
     </div>
+
+    <section class="result">
+        <div class="container">
+            <div class="island">
+                <p class="no-results">По вашему запросу ничего не найдено.</p>
+                <section class="results">
+
+                </section>
+            </div>
+        </div>
+    </section>
 </main>
 
-<footer>
-    <p>&copy; {{ "now" | date: "%Y" }} Etherium <strong>0.2.0</strong></p>
+<footer class="footer">
+    <p>&copy; {{ "now" | date: "%Y" }} Etherium <strong>0.3.0</strong> | <a href="{{ '/changelog' | relative_url }}">Changelog</a></p>
     <p>Powered by GitHub Pages</p>
 </footer>
 </body>
