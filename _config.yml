@@ -14,3 +14,6 @@ colors:
   emerald: "#05b1a0"
   crimson: "#aa002e"
   green: "#0ab320"
+
+include:
+  - search.json
