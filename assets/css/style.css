@@ -55,7 +55,7 @@ nav {
 nav a {
     color: white;
     text-decoration: none;
-    padding: 10px 15px;
+    padding: 0px 10px;
     font-weight: bold;
     transition: color 0.3s;
 }
@@ -97,6 +97,12 @@ nav a:hover {
         font-size: 1.4em;
         margin-top: 20px;
         color: #773939;
+    }
+
+    h2, h3 {
+        &:first-child {
+            margin-top: 0;
+        }
     }
 
     img {
@@ -167,25 +173,6 @@ main p {
     margin-top: -4px;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    main {
-        padding: 15px;
-    }
-
-    header h1 {
-        font-size: 1.5em;
-    }
-
-    nav a {
-        padding: 8px;
-        font-size: 0.9em;
-    }
-}
 
 .result {
     position: absolute;
@@ -220,5 +207,23 @@ main p {
         &:focus {
             outline: none;
         }
+    }
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+    .island {
+        padding: 15px;
     }
 }
