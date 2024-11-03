@@ -4,9 +4,39 @@ layout: none
 [
 {% for page in site.pages %}
 {
-"title": "{{ page.title | escape }}",
-"url": "{{ page.url | relative_url }}",
-"content": {{ page.content | strip_html | jsonify }}
-}{% if forloop.last == false %},{% endif %}
+"title": {{ page.title | jsonify }},
+"url": {{ page.url | jsonify }},
+"sections": [
+{% assign headings = page.content | strip | split: '<h2' %}
+{% if headings.size == 1 %}
+{
+"id": "main",
+"title": "",
+"content": {{ headings[0] | strip_html | newline_to_br | strip_newlines | strip | normalize_whitespace | jsonify }}
+}
+{% else %}
+{% for heading in headings offset:1 %}
+{% assign heading_full = heading | split: '</h2>' | first %}
+{% assign heading_id = heading_full | split: 'id="' | last | split: '"' | first | strip %}
+{% if heading_id == empty %}
+{% assign heading_id = 'section-' | append: forloop.index %}
+{% endif %}
+{% assign heading_title = heading_full | split: '>' | last | strip_html | strip %}
+
+{% assign section_content = heading | split: '</h2>' | last | strip %}
+{% if forloop.last == false %}
+{% assign next_section = headings[forloop.index] | split: '<h2' | first %}
+{% assign section_content = section_content | split: next_section | first %}
+{% endif %}
+
+{
+"id": {{ heading_id | jsonify }},
+"title": {{ heading_title | strip | normalize_whitespace | jsonify }},
+"content": {{ section_content | strip_html | newline_to_br | strip_newlines | replace: '<br />', '\n' | strip | jsonify }}
+}{% unless forloop.last %},{% endunless %}
+{% endfor %}
+{% endif %}
+]
+}{% unless forloop.last %},{% endunless %}
 {% endfor %}
 ]

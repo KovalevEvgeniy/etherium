@@ -1,0 +1,27 @@
+{% capture table_of_contents %}
+<ul>
+    {% assign headings = page.content | markdownify | split: '<h' %}
+    {% for heading in headings %}
+    {% if heading contains '>' %}
+    {% assign heading_parts = heading | split: '>' %}
+    {% assign heading_level = heading_parts[0] | split: ' ' | first %}
+    {% assign heading_text = heading_parts[1] | split: '</' | first | strip_html | strip %}
+{% assign heading_id = heading_text | slugify %}
+
+{% if heading_level contains '2' or heading_level contains '3' %}
+<li style="margin-left: {{ (heading_level | minus: 1) }}px;">
+    <a href="#{{ heading_id }}">{{ heading_text }}</a>
+</li>
+{% endif %}
+{% endif %}
+{% endfor %}
+</ul>
+{% endcapture %}
+
+{% if table_of_contents and heading_level contains '2' or heading_level contains '3' %}
+<div class="table-of-contents">
+    <h2>Оглавление</h2>
+    {{ table_of_contents }}
+</div>
+{% endif %}
+

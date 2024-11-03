@@ -30,20 +30,19 @@
 
 <main class="main">
 
-    <div class="container">
+    <div class="content container">
         <div class="island">
+            {% include table_of_contents.html %}
             {{ content }}
         </div>
     </div>
 
-    <section class="result">
-        <div class="container">
-            <div class="island">
-                <p class="no-results">По вашему запросу ничего не найдено.</p>
-                <section class="results">
+    <section class="result container">
+        <div class="island">
+            <p class="no-results">По вашему запросу ничего не найдено.</p>
+            <section class="results">
 
-                </section>
-            </div>
+            </section>
         </div>
     </section>
 </main>
