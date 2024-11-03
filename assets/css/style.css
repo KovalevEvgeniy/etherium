@@ -50,10 +50,14 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: var(--font-size-base);
-    line-height: 1.7;
+    line-height: 1.25;
     color: var(--color-text-main);
     background-color: var(--color-bg-main);
     text-rendering: optimizeLegibility;
@@ -162,26 +166,29 @@ nav a:hover {
 
     p {
         margin-bottom: var(--spacing-md);
-        line-height: 1.7;
+        line-height: 1.4;
     }
 
     ul, ol {
-        padding-left: var(--spacing-xl);
-        line-height: 1.7;
+        padding-left: var(--spacing-lg);
+        line-height: 1.4;
+        margin-bottom: var(--spacing-md);
 
         li {
             margin-bottom: var(--spacing-sm);
-            line-height: 1.6;
+            line-height: 1.4;
             &:last-child {
                 margin-bottom: 0;
             }
+        }
+
+        &:last-child {
+            margin-bottom: 0;
         }
     }
 
     a {
         color: var(--color-link);
-        text-decoration: none;
-        border-bottom: 1px dashed;
         transition: color 0.2s;
 
         &:hover {
@@ -248,16 +255,12 @@ nav a:hover {
 .result {
     display: none;
     background-color: var(--color-overlay);
-    padding: var(--spacing-md);
     overflow-y: auto;
     z-index: 1000;
 }
 
 .results {
     list-style: none;
-    padding: 0;
-    margin: var(--spacing-lg) auto;
-    max-width: 960px;
 }
 
 .search-result-item {
@@ -283,8 +286,10 @@ nav a:hover {
 
 .search-section {
     margin: var(--spacing-lg) 0;
-    padding-left: var(--spacing-lg);
-    border-left: 3px solid var(--color-primary);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 
     h4 {
         font-size: var(--font-size-lg);
@@ -294,9 +299,7 @@ nav a:hover {
     }
 
     a {
-        text-decoration: none;
         color: inherit;
-        border-bottom: none;
         transition: color 0.2s;
 
         &:hover h4 {
@@ -334,8 +337,8 @@ nav a:hover {
     color: var(--color-text-light);
     font-style: italic;
     font-size: var(--font-size-sm);
-    margin-top: var(--spacing-md);
-    padding-top: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
     border-top: 1px dashed var(--color-primary);
 }
 
@@ -348,17 +351,19 @@ nav a:hover {
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
     box-shadow: 0 2px 4px var(--color-shadow);
+    margin-top: calc(-1 * var(--spacing-md));
+    margin-right: calc(-1 * var(--spacing-md));
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
     :root {
-        --spacing-lg: 1.25rem;
-        --spacing-xl: 1.5rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.2rem;
     }
 
-    body {
-        font-size: var(--font-size-sm);
+    html {
+        font-size: 14px;
     }
 
     .container {

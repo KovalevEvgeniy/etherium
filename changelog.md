@@ -3,6 +3,9 @@ layout: default
 title: Changelog
 ---
 
+### 0.4.0 (2024-11-03)
+- Добавлена страница чеклиста. <a href="{{ '/data/checklist/' | relative_url }}">Чеклист</a>
+
 ### 0.3.1 (2024-11-03)
 - Добавлена страница карты сайта. <a href="{{ '/sitemap/' | relative_url }}">Карта сайта</a>
 

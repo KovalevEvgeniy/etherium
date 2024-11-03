@@ -106,6 +106,7 @@ const Search = {
         const queryRegex = new RegExp(query, 'gi');
         const highlightMatch = text => text.replace(queryRegex, match => `<span class="highlight">${match}</span>`);
         const MAX_PARAGRAPHS = 3;
+        const WORDS_AROUND = 5;
 
         const normalizedContent = content
             .replace(/\\n/g, '\n')
@@ -118,11 +119,54 @@ const Search = {
             .map(p => p.trim())
             .filter(p => p);
 
+        const getMatchContext = paragraph => {
+            // Находим все совпадения
+            const matches = [...paragraph.matchAll(new RegExp(query, 'gi'))]
+                .sort((a, b) => a.index - b.index);
+
+            if (!matches.length) return '';
+
+            // Создаем массив диапазонов для извлечения текста
+            const ranges = matches.reduce((acc, match, index) => {
+                const start = match.index;
+                const end = start + match[0].length;
+
+                // Находим начало и конец контекста
+                const contextStart = Math.max(0,
+                    paragraph.lastIndexOf(' ', Math.max(0, start - WORDS_AROUND * 7)) + 1);
+                const contextEnd = Math.min(paragraph.length,
+                    paragraph.indexOf(' ', end + WORDS_AROUND * 7) === -1
+                        ? paragraph.length
+                        : paragraph.indexOf(' ', end + WORDS_AROUND * 7));
+
+                // Если это первый диапазон или он не пересекается с предыдущим
+                if (index === 0 || contextStart > acc[acc.length - 1].end) {
+                    acc.push({ start: contextStart, end: contextEnd });
+                } else {
+                    // Объединяем с предыдущим диапазоном
+                    acc[acc.length - 1].end = contextEnd;
+                }
+
+                return acc;
+            }, []);
+
+            // Формируем итоговый текст из диапазонов
+            return ranges.map((range, index) => {
+                const text = paragraph.substring(range.start, range.end);
+                const needStartEllipsis = range.start > 0;
+                const needEndEllipsis = range.end < paragraph.length;
+
+                return `${needStartEllipsis ? '... ' : ''}${text}${needEndEllipsis ? ' ...' : ''}`;
+            }).join(' ');
+        };
+
         const matchedParagraphs = paragraphs
             .filter(paragraph => paragraph.toLowerCase().includes(query.toLowerCase()))
             .slice(0, MAX_PARAGRAPHS)
-            .map(paragraph => highlightMatch(paragraph))
-            .map(paragraph => `<p>${paragraph}</p>`)
+            .map(paragraph => getMatchContext(paragraph))
+            .filter(context => context)
+            .map(context => highlightMatch(context))
+            .map(context => `<p>${context}</p>`)
             .join('');
 
         const totalMatches = paragraphs.filter(paragraph =>
@@ -130,9 +174,9 @@ const Search = {
         ).length;
 
         const hasMoreMatches = totalMatches > MAX_PARAGRAPHS;
-        const moreMatchesHtml = hasMoreMatches ?
-            `<p class="more-matches">И ещё ${totalMatches - MAX_PARAGRAPHS} совпадений в этой секции...</p>` :
-            '';
+        const moreMatchesHtml = hasMoreMatches
+            ? `<p class="more-matches">И ещё ${totalMatches - MAX_PARAGRAPHS} совпадений в этой секции...</p>`
+            : '';
 
         return (matchedParagraphs && `${matchedParagraphs}${moreMatchesHtml}`) || '<p>...</p>';
     },
