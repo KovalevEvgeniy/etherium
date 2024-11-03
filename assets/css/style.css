@@ -79,20 +79,20 @@ body {
 }
 
 /* Header */
-header {
+.header {
     text-align: center;
     padding: var(--spacing-lg) 0;
     background-color: var(--color-primary);
     color: var(--color-text-white);
     margin-bottom: var(--spacing-lg);
     box-shadow: 0 2px 4px var(--color-shadow);
-}
 
-header h1 {
-    font-size: var(--font-size-3xl);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    margin-bottom: var(--spacing-md);
+    .header__title {
+        font-size: var(--font-size-3xl);
+        font-weight: 600;
+        letter-spacing: -0.025em;
+        margin-bottom: var(--spacing-md);
+    }
 }
 
 nav {
@@ -355,6 +355,10 @@ nav a:hover {
     margin-right: calc(-1 * var(--spacing-md));
 }
 
+.only-mobile {
+    display: none;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     :root {
@@ -378,5 +382,12 @@ nav a:hover {
         float: none;
         max-width: 100%;
         margin: var(--spacing-md) 0;
+    }
+
+    .only-mobile {
+        display: block;
+    }
+    .only-desktop {
+        display: none;
     }
 }
