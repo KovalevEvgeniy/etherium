@@ -8,6 +8,7 @@
     /* Фоновые цвета - теплые, бумажные оттенки */
     --color-bg-main: #1A2426;      /* Темный фон */
     --color-bg-content: #E8E6E1;   /* Цвет старой бумаги */
+    --color-bg-content-light: #F5F2ED;   /* Светлый цвет старой бумаги */
 
     /* Текстовые цвета */
     --color-text-main: #2D3B3C;    /* Темно-серый с оттенком */
@@ -201,15 +202,36 @@ nav a:hover {
         margin-left: 0.2em;
     }
 
-    th, td {
-        padding: var(--spacing-sm);
-        font-size: var(--font-size-sm);
-    }
-
     hr {
         border: 0;
         border-top: 1px solid var(--color-border);
         margin: var(--spacing-xl) 0;
+    }
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: var(--spacing-md);
+
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            text-align: center;
+
+            &:first-child {
+                text-align: left;
+            }
+        }
+
+        th {
+            background-color: var(--color-bg-content-light);
+        }
+
+        tr:nth-child(2n) {
+            background-color: var(--color-bg-content-light);
+        }
     }
 }
 
@@ -353,6 +375,27 @@ nav a:hover {
     box-shadow: 0 2px 4px var(--color-shadow);
     margin-top: calc(-1 * var(--spacing-md));
     margin-right: calc(-1 * var(--spacing-md));
+
+    a {
+        text-decoration: none;
+    }
+
+    ul {
+        padding-left: 0;
+
+        li {
+            list-style: none;
+            line-height: 1.2;
+            border-bottom: 1px dashed var(--color-border);
+            padding-bottom: var(--spacing-sm);
+
+            &:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
+    }
+
 }
 
 .only-mobile {
@@ -389,5 +432,10 @@ nav a:hover {
     }
     .only-desktop {
         display: none;
+    }
+
+    table {
+        display: block;
+        overflow: auto;
     }
 }

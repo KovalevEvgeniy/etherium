@@ -3,11 +3,6 @@ layout: default
 title: Валютная система и экономика
 ---
 
-## Кошель путешественника
-Этот кожаный кошель зачарован так, чтобы удобно хранить и переносить монеты. Независимо от количества монет внутри, кошель всегда весит 1 фунт. Монеты внутри магически упорядочиваются, позволяя легко проводить расчеты и доставать нужную сумму.
-
-[Кошель путешественника](/data/glossary/travelers-purse.md)
-
 ## Таблица конвертации валют
 
 | Валюта | мм | см | зм | бзм | вд | вт | $ |
@@ -18,6 +13,46 @@ title: Валютная система и экономика
 | Большая золотая (бзм) | 200 | 20 | 2 | 1 | 100 | 1/10 | $40 |
 | Вараниумовый диск (вд) | 2 | 1/5 | 1/50 | 1/100 | 1 | 1/1,000 | $0.40 |
 | Вараниумовый тор (вт) | 4,000 | 400 | 20 | 10 | 1,000 | 1 | $400 |
+
+## Калькулятор конвертации валют
+
+<table>
+    <thead>
+        <tr>
+            <th width="33%">Валюта</th>
+            <th>мм</th>
+            <th>см</th>
+            <th>зм</th>
+            <th>бзм</th>
+            <th>вд</th>
+            <th>вт</th>
+            <th>$</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <input class="currency-input" type="number" value="1" />
+                <select class="currency-select">
+                    <option value="mm">мм</option>
+                    <option value="cm">см</option>
+                    <option value="zm" selected>зм</option>
+                    <option value="bzm">бзм</option>
+                    <option value="vd">вд</option>
+                    <option value="vt">вт</option>
+                    <option value="usd">$</option>
+                </select>
+            </td>
+            <td class="currency-mm">-</td>
+            <td class="currency-cm">-</td>
+            <td class="currency-zm">-</td>
+            <td class="currency-bzm">-</td>
+            <td class="currency-vd">-</td>
+            <td class="currency-vt">-</td>
+            <td class="currency-usd">-</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Примеры конвертации:
 - 1 золотая = 10 серебряных = 100 медных = 50 вараниумовых дисков = $20
@@ -55,3 +90,5 @@ title: Валютная система и экономика
 - 1 монета = 1/3 унции (≈9.45 г)
 - 50 монет = 1 фунт (≈453.6 г)
 - 500 золотых монет = 10 фунтов (≈4.5 кг)
+
+[Кошель путешественника](/data/glossary/travelers-purse.md)

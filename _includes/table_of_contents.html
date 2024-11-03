@@ -1,14 +1,17 @@
 {% capture table_of_contents %}
 <ul>
     {% assign headings = page.content | markdownify | split: '<h2' %}
-    {% for heading in headings %}
-    {% if heading contains '>' %}
-    {% assign heading_parts = heading | split: '>' %}
-    {% assign heading_text = heading_parts[1] | split: '</h2' | first | strip_html | strip %}
+    {% for heading in headings offset:1 %}
+    {% if heading contains '</h2>' %}
+    {% assign heading_parts = heading | split: '</h2>' %}
+    {% assign heading_parts2 = heading_parts[0] | split: '>' %}
+    {% assign heading_text = heading_parts2[1] | strip_html | strip %}
+    {% if heading_text != "" %}
     {% assign heading_id = heading_text | slugify %}
     <li>
         <a href="#{{ heading_id }}">{{ heading_text }}</a>
     </li>
+    {% endif %}
     {% endif %}
     {% endfor %}
 </ul>
@@ -17,7 +20,6 @@
 {% assign h2_count = page.content | markdownify | split: '<h2' | size | minus: 1 %}
 {% if h2_count > 0 %}
 <div class="table-of-contents">
-    <h2>Оглавление</h2>
     {{ table_of_contents }}
 </div>
 {% endif %}
