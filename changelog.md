@@ -6,6 +6,11 @@ title: Changelog
 ### 0.5.2 (2024-11-04)
 - Добавлена страница <a href="{{ '/data/glossary/levitation-network.html' | relative_url }}">Сеть левитации</a>
 - Добавлена страница <a href="{{ '/data/glossary/etherium.html' | relative_url }}">Этериум (Минерал)</a>
+- Добавлена страница <a href="{{ '/data/fractions/technocracy-of-rius/' | relative_url }}">Технократия Риуса</a>
+- Добавлена страница <a href="{{ '/data/fractions/technocracy-of-rius/history.html' | relative_url }}">Хронология</a>
+- Добавлена страница <a href="{{ '/data/glossary/phase-transition.html' | relative_url }}">Фазовый переход - технология быстрого перемещения</a>
+- Добавлена страница <a href="{{ '/data/glossary/levitation-network.html' | relative_url }}">Сеть левитации</a>
+- Добавлена страница <a href="{{ '/data/glossary/vortex-engine.html' | relative_url }}">Вихревой двигатель</a>
 ### 0.5.1 (2024-11-04)
 ### 0.5.0 (2024-11-03)
 - Добавлена страница <a href="{{ '/data/glossary/currency.html' | relative_url }}">Валютная система и экономика</a>
