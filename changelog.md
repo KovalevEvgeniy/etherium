@@ -3,6 +3,12 @@ layout: default
 title: Changelog
 ---
 
+### 0.5.3 (2024-11-05)
+- Добавлена страница <a href="{{ '/data/glossary/veil.html' | relative_url }}">Магическая вуаль</a>
+- Перемещена страница <a href="{{ '/data/glossary/world-levels.html' | relative_url }}">Уровни мира</a>
+- Добавлена страница <a href="{{ '/data/bestiary/' | relative_url }}">Бестиарий</a>
+- Небольшие обновления контента
+
 ### 0.5.2 (2024-11-04)
 - Добавлена страница <a href="{{ '/data/glossary/levitation-network.html' | relative_url }}">Сеть левитации</a>
 - Добавлена страница <a href="{{ '/data/glossary/etherium.html' | relative_url }}">Этериум (Минерал)</a>
