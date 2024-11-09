@@ -23,7 +23,7 @@ const Map = {
 
         this.zones.forEach(zone => {
             if (!zone.classList.contains(name)) {
-                zone.style.opacity = 0.05;
+                zone.style.opacity = 0.1;
             }
         })
     },

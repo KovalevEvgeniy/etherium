@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Глоссарий
+order: 4
 ---
 
 ## Магическая вуаль

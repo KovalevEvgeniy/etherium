@@ -3,6 +3,12 @@ layout: default
 title: Changelog
 ---
 
+### 0.5.4 (2024-11-09)
+- Добавлена страница <a href="{{ '/data/subclass/' | relative_url }}">Подклассы</a>
+- Добавлен раздел <a href="{{ '/data/world/' | relative_url }}">Физическое устройство мира</a>
+- Добавлен раздел <a href="{{ '/data/policies/' | relative_url }}">Политика и общество</a>
+- Небольшие обновления контента
+
 ### 0.5.3 (2024-11-05)
 - Добавлена страница <a href="{{ '/data/glossary/veil.html' | relative_url }}">Магическая вуаль</a>
 - Перемещена страница <a href="{{ '/data/glossary/world-levels.html' | relative_url }}">Уровни мира</a>
