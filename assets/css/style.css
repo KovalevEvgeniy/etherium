@@ -14,8 +14,8 @@
     --color-text-main: #2D3B3C;    /* Темно-серый с оттенком */
     --color-text-light: #5D6E6F;   /* Средне-серый с оттенком */
     --color-text-white: #F5F2ED;   /* Кремовый белый */
-    --color-link: #486D6F;         /* Приглушенный сине-зеленый */
-    --color-link-hover: #5B8A8D;   /* Светлый сине-зеленый */
+    --color-link: #5B8A8D;         /* Сделан более насыщенным */
+    --color-link-hover: #6BA1A4;   /* Светлее и насыщеннее */
 
     /* Служебные цвета */
     --color-border: #D5D0C9;       /* Светло-серый с теплым оттенком */
@@ -23,20 +23,20 @@
     --color-overlay: rgba(26, 36, 38, 0.97);
 
     /* Типографика */
-    --font-size-xs: 0.75rem;    /* 12px */
-    --font-size-sm: 0.875rem;   /* 14px */
-    --font-size-base: 1rem;     /* 16px */
-    --font-size-lg: 1.125rem;   /* 18px */
-    --font-size-xl: 1.25rem;    /* 20px */
-    --font-size-2xl: 1.5rem;    /* 24px */
-    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.375rem;
+    --font-size-2xl: 1.563rem;
+    --font-size-3xl: 1.875rem;
 
     /* Отступы */
-    --spacing-xs: 0.25rem;      /* 4px */
-    --spacing-sm: 0.5rem;       /* 8px */
-    --spacing-md: 1rem;         /* 16px */
-    --spacing-lg: 1.5rem;       /* 24px */
-    --spacing-xl: 2rem;         /* 32px */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
 
     /* Радиусы */
     --radius-sm: 4px;
@@ -348,14 +348,6 @@ nav a:hover {
     }
 }
 
-.highlight {
-    background-color: var(--color-text-white);
-    padding: 0.2em 0.4em;
-    border-radius: var(--radius-sm);
-    color: var(--color-primary);
-    font-weight: 500;
-}
-
 .more-matches {
     color: var(--color-text-light);
     font-style: italic;
@@ -399,6 +391,35 @@ nav a:hover {
 
 }
 
+.world-map {
+    .world-map__map {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        display: block;
+    }
+
+    .world-map__legend {
+        margin-top: var(--spacing-lg);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+
+    .world-map__legend-item {
+        padding: 2px 5px;
+        white-space: nowrap;
+        border-radius: var(--radius-sm);
+        background: var(--color-bg-content-light);
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            background: var(--color-bg-content-dark);
+        }
+    }
+}
+
 .only-mobile {
     display: none;
 }
@@ -438,5 +459,30 @@ nav a:hover {
     table {
         display: block;
         overflow: auto;
+    }
+}
+
+
+
+.highlight {
+    background-color: var(--color-bg-content-light);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-weight: 500;
+    white-space: break-spaces;
+    margin-bottom: var(--spacing-md);
+
+    .nx {
+        color: #111111;
+    }
+    .mi {
+        color: #298289;
+    }
+    .o {
+        color: #999999;
+    }
+    .mf {
+        color: #298289;
     }
 }
