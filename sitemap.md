@@ -3,6 +3,8 @@ layout: default
 title: Карта сайта
 ---
 
+{% assign excluded_directory = "/progress" %}
+
 <ul>
     {% assign all_pages = site.pages | sort: "title" %}
     {% assign top_level_pages = "" | split: "" %}
@@ -10,14 +12,16 @@ title: Карта сайта
     {% assign unordered_pages = "" | split: "" %}
 
     {% for page in all_pages %}
-        {% assign level = page.url | split: '/' | size %}
-        {% if level == 3 %}
-            {% if page.order %}
-                {% assign ordered_pages = ordered_pages | push: page %}
-            {% else %}
-                {% assign unordered_pages = unordered_pages | push: page %}
+        {% unless page.url contains excluded_directory %}
+            {% assign level = page.url | split: '/' | size %}
+            {% if level == 3 %}
+                {% if page.order %}
+                    {% assign ordered_pages = ordered_pages | push: page %}
+                {% else %}
+                    {% assign unordered_pages = unordered_pages | push: page %}
+                {% endif %}
             {% endif %}
-        {% endif %}
+        {% endunless %}
     {% endfor %}
     
     {% assign ordered_pages = ordered_pages | sort: "order" %}
@@ -33,13 +37,15 @@ title: Карта сайта
                 {% assign subpages_unordered = "" | split: "" %}
                 
                 {% for subpage in all_pages %}
-                    {% if subpage.url contains page.url and subpage.url != page.url and subpage.title %}
-                        {% if subpage.order %}
-                            {% assign subpages_ordered = subpages_ordered | push: subpage %}
-                        {% else %}
-                            {% assign subpages_unordered = subpages_unordered | push: subpage %}
+                    {% unless subpage.url contains excluded_directory %}
+                        {% if subpage.url contains page.url and subpage.url != page.url and subpage.title %}
+                            {% if subpage.order %}
+                                {% assign subpages_ordered = subpages_ordered | push: subpage %}
+                            {% else %}
+                                {% assign subpages_unordered = subpages_unordered | push: subpage %}
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
+                    {% endunless %}
                 {% endfor %}
                 
                 {% assign subpages_ordered = subpages_ordered | sort: "order" %}
@@ -75,13 +81,15 @@ title: Карта сайта
                 {% assign subpages_unordered = "" | split: "" %}
                 
                 {% for subpage in all_pages %}
-                    {% if subpage.url contains page.url and subpage.url != page.url and subpage.title %}
-                        {% if subpage.order %}
-                            {% assign subpages_ordered = subpages_ordered | push: subpage %}
-                        {% else %}
-                            {% assign subpages_unordered = subpages_unordered | push: subpage %}
+                    {% unless subpage.url contains excluded_directory %}
+                        {% if subpage.url contains page.url and subpage.url != page.url and subpage.title %}
+                            {% if subpage.order %}
+                                {% assign subpages_ordered = subpages_ordered | push: subpage %}
+                            {% else %}
+                                {% assign subpages_unordered = subpages_unordered | push: subpage %}
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
+                    {% endunless %}
                 {% endfor %}
                 
                 {% assign subpages_ordered = subpages_ordered | sort: "order" %}
