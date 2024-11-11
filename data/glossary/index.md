@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Глоссарий
-order: 99
+order: 98
 ---
 
 ## Кошель путешественника

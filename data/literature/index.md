@@ -1,6 +1,6 @@
 ---
 layout: default
 title: Список литературы
-order: 98
+order: 99
 protected: true
 ---
