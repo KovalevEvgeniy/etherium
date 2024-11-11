@@ -1,0 +1,21 @@
+{% assign sorted_pages = "" | split: "" %}
+
+{% comment %}Собираем страницы в массив{% endcomment %}
+{% for page in include.pages %}
+{% assign path_parts = page.path | split: "/" %}
+{% if path_parts[include.level] == include.current_section and path_parts.size == include.expected_size %}
+{% assign sorted_pages = sorted_pages | push: page %}
+{% endif %}
+{% endfor %}
+
+{% comment %}Сортируем и выводим страницы{% endcomment %}
+{% assign sorted_pages = sorted_pages | sort: "title" %}
+{% for page in sorted_pages %}
+<li>
+    {% if page.nav_item != false %}
+    <a {% if page.protected %}class="sitemap-list__protected"{% endif %} href="{{ page.url | relative_url }}">{{ page.title }}</a>
+    {% else %}
+    {{ page.title }}
+    {% endif %}
+</li>
+{% endfor %}

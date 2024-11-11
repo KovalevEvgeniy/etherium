@@ -9,6 +9,7 @@
     --color-bg-main: #1A2426;      /* Темный фон */
     --color-bg-content: #E8E6E1;   /* Цвет старой бумаги */
     --color-bg-content-light: #F5F2ED;   /* Светлый цвет старой бумаги */
+    --color-bg-content-dark: #D5D0C9;    /* Темный цвет старой бумаги */
 
     /* Текстовые цвета */
     --color-text-main: #2D3B3C;    /* Темно-серый с оттенком */
@@ -16,6 +17,7 @@
     --color-text-white: #F5F2ED;   /* Кремовый белый */
     --color-link: #5B8A8D;         /* Сделан более насыщенным */
     --color-link-hover: #6BA1A4;   /* Светлее и насыщеннее */
+    --color-protected: #c51010;     /* Красный цвет для защищенных страниц */
 
     /* Служебные цвета */
     --color-border: #D5D0C9;       /* Светло-серый с теплым оттенком */
@@ -154,12 +156,12 @@ nav a:hover {
 
     h3 {
         font-size: var(--font-size-xl);
-        font-weight: 500;
+
         color: var(--color-primary);
         margin: var(--spacing-lg) 0 var(--spacing-md);
     }
 
-    h2, h3 {
+    h1, h2, h3, h5, h6 {
         &:first-child {
             margin-top: 0;
         }
@@ -174,15 +176,14 @@ nav a:hover {
         padding-left: var(--spacing-lg);
         line-height: 1.4;
         margin-bottom: var(--spacing-md);
-
-        li {
-            margin-bottom: var(--spacing-sm);
-            line-height: 1.4;
-            &:last-child {
-                margin-bottom: 0;
-            }
+        &:last-child {
+            margin-bottom: 0;
         }
+    }
 
+    li {
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
         &:last-child {
             margin-bottom: 0;
         }
@@ -417,6 +418,34 @@ nav a:hover {
         &:hover {
             background: var(--color-bg-content-dark);
         }
+    }
+}
+
+.sitemap-list {
+    list-style: none;
+    padding-left: 0;
+
+    h2, h3, h4, h5 {
+        margin-top: var(--spacing-lg);
+        margin-bottom: 0;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    .sitemap-list__protected {
+        color: var(--color-protected);
+        a {
+            color: var(--color-protected);
+        }
+    }
+    .sitemap-list__spoiler {
+        color: var(--color-protected);
     }
 }
 

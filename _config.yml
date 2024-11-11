@@ -1,5 +1,14 @@
 title: "Etherium"
 markdown: kramdown
+defaults:
+  - scope:
+      path: "data"
+    values:
+      permalink: /:basename/
+  - scope:
+      path: "data/**/index"
+    values:
+      published: false
 
 colors:
   sun: "#ff9f0e"

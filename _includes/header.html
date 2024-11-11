@@ -1,0 +1,19 @@
+<header class="header">
+    <div class="container">
+        <div class="header__title">Etherium</div>
+        <nav>
+            <a href="{{ '/' | relative_url }}">Главная</a>
+            <a href="{{ '/sitemap' | relative_url }}">Оглавление</a>
+            <a href="{{ '/data/homebrew/' | relative_url }}">Хоумбрю</a>
+        </nav>
+    </div>
+</header>
+
+<div class="search">
+    <div class="container">
+        <input type="search" name="search" placeholder="Поиск...">
+
+        {% include check_duplicate_urls.html %}
+
+    </div>
+</div>
