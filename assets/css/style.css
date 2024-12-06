@@ -44,6 +44,8 @@
     --radius-sm: 4px;
     --radius-md: 6px;
     --radius-lg: 8px;
+
+    --color-accent: #f8337a;
 }
 
 /* Reset и базовые стили */
@@ -347,6 +349,11 @@ nav a:hover {
             margin-bottom: 0;
         }
     }
+
+    .highlight {
+        color: var(--color-text-white);
+        background-color: var(--color-accent);
+    }
 }
 
 .more-matches {
@@ -491,11 +498,9 @@ nav a:hover {
     }
 }
 
-
-
 .highlight {
     background-color: var(--color-bg-content-light);
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs);
     border-radius: var(--radius-sm);
     color: var(--color-primary);
     font-weight: 500;

@@ -11,11 +11,13 @@
 {% comment %}Сортируем и выводим страницы{% endcomment %}
 {% assign sorted_pages = sorted_pages | sort: "title" %}
 {% for page in sorted_pages %}
-<li>
-    {% if page.nav_item != false %}
-    <a {% if page.protected %}class="sitemap-list__protected"{% endif %} href="{{ page.url | relative_url }}">{{ page.title }}</a>
-    {% else %}
-    {{ page.title }}
-    {% endif %}
-</li>
+    {% unless page.hidden == true %}
+        <li>
+            {% if page.nav_item != false %}
+            <a {% if page.protected %}class="sitemap-list__protected"{% endif %} href="{{ page.url | relative_url }}">{{ page.title }}</a>
+            {% else %}
+            {{ page.title }}
+            {% endif %}
+        </li>
+    {% endunless %}
 {% endfor %}

@@ -2,7 +2,13 @@
 layout: none
 ---
 [
+{% assign visible_pages = "" | split: "" %}
 {% for page in site.pages %}
+{% unless page.hidden == true %}
+{% assign visible_pages = visible_pages | push: page %}
+{% endunless %}
+{% endfor %}
+{% for page in visible_pages %}
 {
 "title": {{ page.title | jsonify }},
 "url": {{ page.url | jsonify }},

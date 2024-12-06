@@ -106,14 +106,16 @@ title: Карта сайта
                 {% assign sorted_pages = pages_with_order | sort %}
                 {% for page_info in sorted_pages %}
                 {% assign page = page_info[2] %}
-                        <li>
-                            {% if page.nav_item != false %}
-                                <a href="{{ page.url | relative_url }}">{{ page.title }} {{ page.protected }}</a>
-                            {% else %}
-                                {{ page.title }}
-                            {% endif %}
-                        </li>
-                {% endfor %}
+                        {% unless page.hidden == true %}
+                            <li>
+                                {% if page.nav_item != false %}
+                                    <a href="{{ page.url | relative_url }}">{{ page.title }} {{ page.protected }}</a>
+                                {% else %}
+                                    {{ page.title }}
+                                {% endif %}
+                            </li>
+                        {% endunless %}
+                    {% endfor %}
                 </ul>
             </li>
         {% endfor %}
