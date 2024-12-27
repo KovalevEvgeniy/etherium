@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="120 120 300 300">
+    <defs>
+        <linearGradient id="beanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c44565"/>
+            <stop offset="100%" stop-color="#c46a45"/>
+        </linearGradient>
+    </defs>
+
+    <g transform="rotate(20 256 256) scale(1.1)">
+        <path
+                d="M256 370c-60 0-110-50-110-110s20-130 90-140c50-6 100 20 110 80 10 60-30 170-90 170z"
+                fill="url(#beanGradient)"
+                stroke="#ed88c0"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+        />
+
+        <circle cx="210" cy="240" r="20" fill="white" opacity="0.6" />
+        <circle cx="270" cy="290" r="13" fill="white" opacity="0.8" />
+    </g>
+</svg>

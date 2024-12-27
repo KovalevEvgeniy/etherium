@@ -70,6 +70,7 @@ body {
 }
 
 .bg {
+    background-color: #2c8ca7;
     background-image: url('../images/world-layers.png');
     background-size: 100% auto;
     background-repeat: no-repeat;
