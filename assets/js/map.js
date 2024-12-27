@@ -15,6 +15,8 @@ const Map = {
         this.labels.forEach(label => {
             selector += `.${label.dataset.zoneName},`;
         });
+
+        if (!selector) return;
         this.zones = document.querySelectorAll(selector.slice(0, -1));
     },
     enterMapLayer (event) {

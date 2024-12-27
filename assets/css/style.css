@@ -7,7 +7,7 @@
 
     /* Фоновые цвета - теплые, бумажные оттенки */
     --color-bg-main: #1A2426;      /* Темный фон */
-    --color-bg-content: #E8E6E1;   /* Цвет старой бумаги */
+    --color-bg-content: #E8E6E1DE;   /* Цвет старой бумаги */
     --color-bg-content-light: #F5F2ED;   /* Светлый цвет старой бумаги */
     --color-bg-content-dark: #D5D0C9;    /* Темный цвет старой бумаги */
 
@@ -31,7 +31,7 @@
     --font-size-lg: 1.125rem;
     --font-size-xl: 1.25rem;
     --font-size-2xl: 1.563rem;
-    --font-size-3xl: 1.875rem;
+    --font-size-3xl: 2rem;
 
     /* Отступы */
     --spacing-xs: 0.25rem;
@@ -69,6 +69,18 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+.bg {
+    background-image: url('../images/world-layers.png');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    width: 100dvw;
+    height: 100dvh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    will-change: transform;
+}
+
 .container {
     width: 960px;
     max-width: 100%;
@@ -85,12 +97,12 @@ body {
 
 /* Header */
 .header {
+    position: relative;
+    z-index: 1;
     text-align: center;
     padding: var(--spacing-lg) 0;
-    background-color: var(--color-primary);
     color: var(--color-text-white);
     margin-bottom: var(--spacing-lg);
-    box-shadow: 0 2px 4px var(--color-shadow);
 
     .header__title {
         font-size: var(--font-size-3xl);
@@ -258,20 +270,20 @@ nav a:hover {
 
 /* Поиск */
 .search {
+    position: relative;
     margin: var(--spacing-md) 0;
 
     input {
         width: 100%;
         padding: var(--spacing-md);
         font-size: var(--font-size-base);
-        border: 2px solid var(--color-primary);
+        border: none;
         border-radius: var(--radius-md);
         background-color: var(--color-bg-content);
         transition: all 0.2s ease;
 
         &:focus {
             outline: none;
-            border-color: var(--color-primary-light);
             box-shadow: 0 0 0 3px var(--color-shadow);
         }
     }
