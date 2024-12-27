@@ -80,6 +80,10 @@ body {
     top: 0;
     left: 0;
     will-change: transform;
+
+    @media (max-width: 768px) {
+        background-size: 150% auto;
+    }
 }
 
 .container {
