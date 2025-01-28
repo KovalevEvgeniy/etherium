@@ -109,7 +109,12 @@ title: Карта сайта
                         {% unless page.hidden == true %}
                             <li>
                                 {% if page.nav_item != false %}
-                                    <a href="{{ page.url | relative_url }}">{{ page.title }} {{ page.protected }}</a>
+                                    <a 
+                                        {% if page.protected %}class="sitemap-list__protected"{% endif %}
+                                        href="{{ page.url | relative_url }}"
+                                    >
+                                        {{ page.title }}
+                                    </a>
                                 {% else %}
                                     {{ page.title }}
                                 {% endif %}
