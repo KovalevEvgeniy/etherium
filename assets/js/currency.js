@@ -5,8 +5,8 @@ const  Currency = {
         zm: 100,
         bzm: 200,
         vd: 2,
-        vt: 4000,
-        usd: 0.02 // Это базовая стоимость медной монеты
+        vt: 2000,
+        usd: 5 // Это базовая стоимость медной монеты
     },
 
     init() {
@@ -16,6 +16,8 @@ const  Currency = {
             document.querySelector('.currency-input').addEventListener('input', this.updateCurrencies.bind(this));
             document.querySelector('.currency-select').addEventListener('change', this.updateCurrencies.bind(this));
         }
+
+        this.updateCurrencies();
     },
 
     updateCurrencies() {
