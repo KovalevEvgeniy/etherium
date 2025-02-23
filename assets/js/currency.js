@@ -30,13 +30,17 @@ const  Currency = {
         const baseValue = inputValue * this.rates[selectedCurrency];
 
         // Обновляем значения в таблице
-        document.querySelector('.currency-mm').textContent = (baseValue / this.rates.mm).toFixed(2);
-        document.querySelector('.currency-cm').textContent = (baseValue / this.rates.cm).toFixed(2);
-        document.querySelector('.currency-zm').textContent = (baseValue / this.rates.zm).toFixed(2);
-        document.querySelector('.currency-bzm').textContent = (baseValue / this.rates.bzm).toFixed(2);
-        document.querySelector('.currency-vd').textContent = (baseValue / this.rates.vd).toFixed(2);
-        document.querySelector('.currency-vt').textContent = (baseValue / this.rates.vt).toFixed(2);
-        document.querySelector('.currency-usd').textContent = (baseValue / this.rates.usd).toFixed(2);
+        document.querySelector('.currency-mm').textContent = this.getVal(baseValue / this.rates.mm);
+        document.querySelector('.currency-cm').textContent = this.getVal(baseValue / this.rates.cm);
+        document.querySelector('.currency-zm').textContent = this.getVal(baseValue / this.rates.zm);
+        document.querySelector('.currency-bzm').textContent = this.getVal(baseValue / this.rates.bzm);
+        document.querySelector('.currency-vd').textContent = this.getVal(baseValue / this.rates.vd);
+        document.querySelector('.currency-vt').textContent = this.getVal(baseValue / this.rates.vt);
+        document.querySelector('.currency-usd').textContent = this.getVal(baseValue / this.rates.usd);
+    },
+
+    getVal(val) {
+        return val < 0.01 ? '-' : (val)
     }
 }
 
