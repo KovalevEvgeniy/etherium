@@ -23,6 +23,7 @@ const  Currency = {
     updateCurrencies() {
         const input = document.querySelector('.currency-input');
         const select = document.querySelector('.currency-select');
+        if (!input || !select) return;
         const selectedCurrency = select.value;
         const inputValue = parseFloat(input.value) || 0;
 
