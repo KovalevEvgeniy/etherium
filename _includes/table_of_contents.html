@@ -1,9 +1,9 @@
 {% capture table_of_contents %}
 <ul>
-    {% assign headings = page.content | markdownify | split: '<h2' %}
+    {% assign headings = page.content | markdownify | split: '<h4' %}
     {% for heading in headings offset:1 %}
-    {% if heading contains '</h2>' %}
-    {% assign heading_parts = heading | split: '</h2>' %}
+    {% if heading contains '</h4>' %}
+    {% assign heading_parts = heading | split: '</h4>' %}
     {% assign heading_parts2 = heading_parts[0] | split: '>' %}
     {% assign heading_text = heading_parts2[1] | strip_html | strip %}
     {% if heading_text != "" %}
@@ -17,8 +17,8 @@
 </ul>
 {% endcapture %}
 
-{% assign h2_count = page.content | markdownify | split: '<h2' | size | minus: 1 %}
-{% if h2_count > 0 %}
+{% assign h4_count = page.content | markdownify | split: '<h4' | size | minus: 1 %}
+{% if h4_count > 0 %}
 <div class="table-of-contents">
     {{ table_of_contents }}
 </div>

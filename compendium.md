@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: clear
 title: Полный компендиум мира Этериума
 ---
 

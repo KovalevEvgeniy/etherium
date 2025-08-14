@@ -158,34 +158,6 @@ nav a:hover {
         opacity: .5;
     }
 
-    h1 {
-        font-size: var(--font-size-3xl);
-        font-weight: 600;
-        letter-spacing: -0.025em;
-        color: var(--color-primary-darker);
-        margin-bottom: var(--spacing-lg);
-    }
-
-    h2 {
-        font-size: var(--font-size-2xl);
-        font-weight: 600;
-        color: var(--color-primary-dark);
-        margin: var(--spacing-xl) 0 var(--spacing-md);
-    }
-
-    h3 {
-        font-size: var(--font-size-xl);
-
-        color: var(--color-primary);
-        margin: var(--spacing-lg) 0 var(--spacing-md);
-    }
-
-    h1, h2, h3, h5, h6 {
-        &:first-child {
-            margin-top: 0;
-        }
-    }
-
     p {
         margin-bottom: var(--spacing-md);
         line-height: 1.4;
@@ -253,6 +225,101 @@ nav a:hover {
         tr:nth-child(2n) {
             background-color: var(--color-bg-content-light);
         }
+    }
+
+    /* Простые, но эффективные стили для заголовков */
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: inherit;
+        font-weight: bold;
+        line-height: 1.4;
+        margin-top: 1.5em;
+        margin-bottom: 0.8em;
+        color: #2c3e50;
+    }
+
+    /* H1 - Главный заголовок */
+    h1 {
+        font-size: 2.2em;
+        margin-top: 0;
+        margin-bottom: 1em;
+        color: #1a252f;
+        text-align: center;
+        border-bottom: 2px solid #3593aa;
+        padding-bottom: 0.5em;
+    }
+
+    /* H2 - Основные разделы */
+    h2 {
+        font-size: 1.8em;
+        color: #2c3e50;
+        margin-top: 2em;
+        border-bottom: 1px solid #bdc3c7;
+        padding-bottom: 0.3em;
+    }
+
+    /* H3 - Подразделы */
+    h3 {
+        font-size: 1.5em;
+        color: #34495e;
+        margin-top: 1.8em;
+    }
+
+    /* H4 - Подподразделы */
+    h4 {
+        font-size: 1.3em;
+        color: #2c3e50;
+        margin-top: 1.5em;
+    }
+
+    /* H5 - Мелкие разделы */
+    h5 {
+        font-size: 1.1em;
+        color: #2c3e50;
+        margin-top: 1.3em;
+        font-style: italic;
+    }
+
+    /* H6 - Самые мелкие заголовки */
+    h6 {
+        font-size: 1em;
+        color: #7f8c8d;
+        margin-top: 1.2em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9em;
+    }
+
+    /* Исключения для оглавления */
+    .table-of-contents h1,
+    .table-of-contents h2,
+    .table-of-contents h3,
+    .table-of-contents h4,
+    .table-of-contents h5,
+    .table-of-contents h6 {
+        margin: 0;
+        font-size: inherit;
+        border: none;
+        padding: 0;
+        text-align: left;
+        text-transform: none;
+        font-style: normal;
+        letter-spacing: normal;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        h1 { font-size: 1.8em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.3em; }
+        h4 { font-size: 1.2em; }
+        h5 { font-size: 1.05em; }
+        h6 { font-size: 0.9em; }
+    }
+
+    /* Якорные ссылки */
+    h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
+        scroll-margin-top: 2em;
     }
 }
 
