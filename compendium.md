@@ -5,52 +5,8 @@ title: Полный компендиум мира Этериума
 
 *Собрание всех знаний о мире Этериума в одном месте*
 
-{% comment %} Собираем данные для оглавления {% endcomment %}
-{% assign grouped_pages = "" | split: "" %}
-{% for page in site.pages %}
-{% assign path_parts = page.path | split: "/" %}
-{% assign filename = path_parts | last %}
-{% if path_parts[0] == "data" and filename != "index.md" %}
-{% assign grouped_pages = grouped_pages | push: page %}
-{% endif %}
-{% endfor %}
-
-{% assign sections = "" | split: "" %}
-{% for page in grouped_pages %}
-{% assign path_parts = page.path | split: "/" %}
-{% if path_parts.size > 1 %}
-{% assign section = path_parts[1] %}
-{% unless sections contains section %}
-{% assign sections = sections | push: section %}
-{% endunless %}
-{% endif %}
-{% endfor %}
-
-{% include sort_section_info.html items=sections level=1 expected_size=3 %}
-
-{% comment %} Создаем оглавление только из разрешенных разделов {% endcomment %}
-{% assign toc_sections = "" | split: "" %}
-{% for section_info in sorted_items %}
-{% assign section = section_info[3] %}
-{% assign section_protected = section_info[2] %}
-{% assign section_title = section_info[1] %}
-{% unless section == "hidden" or section_protected == true %}
-{% assign toc_sections = toc_sections | push: section_info %}
-{% endunless %}
-{% endfor %}
-
-{% if toc_sections.size > 0 %}
-<div class="table-of-contents">
-<ul>
-{% for section_info in toc_sections %}
-{% assign section_title = section_info[1] %}
-    <li>
-        <a href="#{{ section_title | slugify }}">{{ section_title }}</a>
-    </li>
-{% endfor %}
-</ul>
-</div>
-{% endif %}
+{% comment %} Подключаем оглавление (вся логика внутри инклюда) {% endcomment %}
+{% include compendium_toc.html %}
 
 ---
 

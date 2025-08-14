@@ -1,0 +1,54 @@
+{% comment %} Простое оглавление компендиума {% endcomment %}
+
+{% assign grouped_pages = "" | split: "" %}
+{% for page in site.pages %}
+{% assign path_parts = page.path | split: "/" %}
+{% assign filename = path_parts | last %}
+{% if path_parts[0] == "data" and filename != "index.md" %}
+{% assign grouped_pages = grouped_pages | push: page %}
+{% endif %}
+{% endfor %}
+
+{% assign sections = "" | split: "" %}
+{% for page in grouped_pages %}
+{% assign path_parts = page.path | split: "/" %}
+{% if path_parts.size > 1 %}
+{% assign section = path_parts[1] %}
+{% unless sections contains section %}
+{% assign sections = sections | push: section %}
+{% endunless %}
+{% endif %}
+{% endfor %}
+
+{% include sort_section_info.html items=sections level=1 expected_size=3 %}
+
+{% assign toc_items = "" | split: "" %}
+
+{% comment %} Создаем элементы оглавления {% endcomment %}
+{% for section_info in sorted_items %}
+{% assign section = section_info[3] %}
+{% assign section_protected = section_info[2] %}
+{% assign section_title = section_info[1] %}
+
+{% unless section == "hidden" or section_protected == true %}
+{% assign toc_item = "2|" | append: section_title | append: "|" | append: section_title | slugify %}
+{% assign toc_items = toc_items | push: toc_item %}
+{% endunless %}
+{% endfor %}
+
+{% if toc_items.size > 0 %}
+<div class="table-of-contents">
+    <ul>
+        {% for toc_item in toc_items %}
+        {% assign item_data = toc_item | split: "|" %}
+        {% assign level = item_data[0] %}
+        {% assign text = item_data[1] %}
+        {% assign id = item_data[2] %}
+
+        <li class="toc-level-{{ level }}">
+            <a href="#{{ id }}">{{ text }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
