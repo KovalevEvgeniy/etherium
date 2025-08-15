@@ -1,4 +1,4 @@
-{% comment %} Простое оглавление компендиума {% endcomment %}
+{% comment %} Простое блочное оглавление компендиума {% endcomment %}
 
 {% assign grouped_pages = "" | split: "" %}
 {% for page in site.pages %}
@@ -20,35 +20,223 @@
 {% endif %}
 {% endfor %}
 
-{% include sort_section_info.html items=sections level=1 expected_size=3 %}
+{% comment %} Создаем собственную сортировку для оглавления {% endcomment %}
+{% assign toc_sections_with_order = "" | split: "" %}
+{% for section in sections %}
+{% assign section_info = "" | split: "" %}
+{% assign section_title = section | capitalize %}
+{% assign section_protected = false %}
+{% assign should_skip = false %}
 
-{% assign toc_items = "" | split: "" %}
+{% for page in grouped_pages %}
+{% assign path_parts = page.path | split: "/" %}
+{% if path_parts[1] == section and path_parts.size == 3 and path_parts.last == "index.md" %}
+{% if page.hidden == true %}
+{% assign should_skip = true %}
+{% break %}
+{% endif %}
+{% assign section_title = page.title %}
+{% assign section_protected = page.protected %}
+{% if page.order %}
+{% assign padded_order = "00" | append: page.order %}
+{% assign padded_order = padded_order | slice: -2, 2 %}
+{% assign sort_key = "0" | append: padded_order | append: section_title %}
+{% else %}
+{% assign sort_key = "1" | append: section_title %}
+{% endif %}
+{% endif %}
+{% endfor %}
 
-{% comment %} Создаем элементы оглавления {% endcomment %}
-{% for section_info in sorted_items %}
-{% assign section = section_info[3] %}
-{% assign section_protected = section_info[2] %}
-{% assign section_title = section_info[1] %}
-
-{% unless section == "hidden" or section_protected == true %}
-{% assign toc_item = "2|" | append: section_title | append: "|" | append: section_title | slugify %}
-{% assign toc_items = toc_items | push: toc_item %}
+{% unless should_skip %}
+{% assign section_info = section_info | push: sort_key %}
+{% assign section_info = section_info | push: section_title %}
+{% assign section_info = section_info | push: section_protected %}
+{% assign section_info = section_info | push: section %}
+{% assign toc_sections_with_order = toc_sections_with_order | push: section_info %}
 {% endunless %}
 {% endfor %}
 
-{% if toc_items.size > 0 %}
-<div class="table-of-contents">
-    <ul>
-        {% for toc_item in toc_items %}
-        {% assign item_data = toc_item | split: "|" %}
-        {% assign level = item_data[0] %}
-        {% assign text = item_data[1] %}
-        {% assign id = item_data[2] %}
+{% assign toc_sorted_sections = toc_sections_with_order | sort %}
 
-        <li class="toc-level-{{ level }}">
-            <a href="#{{ id }}">{{ text }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+<div class="compendium-toc">
+    {% comment %} Создаем блоки для каждого раздела {% endcomment %}
+    {% for section_info in toc_sorted_sections %}
+    {% assign section = section_info[3] %}
+    {% assign section_protected = section_info[2] %}
+    {% assign section_title = section_info[1] %}
+
+    {% comment %} Пропускаем скрытые и защищенные разделы {% endcomment %}
+    {% unless section == "hidden" or section_protected == true %}
+
+    {% comment %} Собираем все элементы этого раздела с правильной сортировкой {% endcomment %}
+    {% assign section_items = "" | split: "" %}
+
+    {% comment %} Добавляем основные страницы раздела с сортировкой по order {% endcomment %}
+    {% assign section_pages_with_order = "" | split: "" %}
+    {% for page in grouped_pages %}
+    {% assign path_parts = page.path | split: "/" %}
+    {% if path_parts[1] == section and path_parts.size == 3 %}
+    {% assign page_info = "" | split: "" %}
+    {% assign page_order = 999999 %}
+    {% if page.order %}
+    {% assign page_order = page.order %}
+    {% endif %}
+    {% assign page_info = page_info | push: page_order %}
+    {% assign page_info = page_info | push: page.title %}
+    {% assign page_info = page_info | push: page %}
+    {% assign section_pages_with_order = section_pages_with_order | push: page_info %}
+    {% endif %}
+    {% endfor %}
+
+    {% assign sorted_section_pages = section_pages_with_order | sort %}
+    {% for page_info in sorted_section_pages %}
+    {% assign page = page_info[2] %}
+    {% unless page.hidden == true or page.protected == true %}
+    {% assign page_slug = page.title | slugify %}
+    {% assign section_item = page.title | append: "|" | append: page_slug %}
+    {% assign section_items = section_items | push: section_item %}
+    {% endunless %}
+    {% endfor %}
+
+    {% comment %} Находим подразделы {% endcomment %}
+    {% assign subsections = "" | split: "" %}
+    {% for page in grouped_pages %}
+    {% assign path_parts = page.path | split: "/" %}
+    {% if path_parts[1] == section and path_parts.size > 3 %}
+    {% assign subsection = path_parts[2] %}
+    {% unless subsections contains subsection %}
+    {% assign subsections = subsections | push: subsection %}
+    {% endunless %}
+    {% endif %}
+    {% endfor %}
+
+    {% comment %} Сортируем подразделы {% endcomment %}
+    {% assign toc_subsections_with_order = "" | split: "" %}
+    {% for subsection in subsections %}
+    {% assign subsection_info = "" | split: "" %}
+    {% assign subsection_title = subsection | capitalize %}
+    {% assign subsection_protected = false %}
+    {% assign should_skip = false %}
+
+    {% for page in grouped_pages %}
+    {% assign path_parts = page.path | split: "/" %}
+    {% if path_parts[2] == subsection and path_parts.size == 4 and path_parts.last == "index.md" %}
+    {% if page.hidden == true %}
+    {% assign should_skip = true %}
+    {% break %}
+    {% endif %}
+    {% assign subsection_title = page.title %}
+    {% assign subsection_protected = page.protected %}
+    {% if page.order %}
+    {% assign padded_order = "00" | append: page.order %}
+    {% assign padded_order = padded_order | slice: -2, 2 %}
+    {% assign sort_key = "0" | append: padded_order | append: subsection_title %}
+    {% else %}
+    {% assign sort_key = "1" | append: subsection_title %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
+    {% unless should_skip %}
+    {% assign subsection_info = subsection_info | push: sort_key %}
+    {% assign subsection_info = subsection_info | push: subsection_title %}
+    {% assign subsection_info = subsection_info | push: subsection_protected %}
+    {% assign subsection_info = subsection_info | push: subsection %}
+    {% assign toc_subsections_with_order = toc_subsections_with_order | push: subsection_info %}
+    {% endunless %}
+    {% endfor %}
+
+    {% assign toc_sorted_subsections = toc_subsections_with_order | sort %}
+
+    {% comment %} Добавляем подразделы {% endcomment %}
+    {% for subsection_info in toc_sorted_subsections %}
+    {% assign subsection = subsection_info[3] %}
+    {% assign subsection_protected = subsection_info[2] %}
+    {% assign subsection_title = subsection_info[1] %}
+
+    {% unless subsection_protected == true %}
+    {% assign subsection_slug = subsection_title | slugify %}
+    {% assign section_item = subsection_title | append: "|" | append: subsection_slug %}
+    {% assign section_items = section_items | push: section_item %}
+    {% endunless %}
+    {% endfor %}
+
+    {% comment %} Рендерим блок раздела только если есть элементы {% endcomment %}
+    {% if section_items.size > 0 %}
+    <div class="compendium-toc__block">
+        <strong class="compendium-toc__block-title">
+            <a href="#{{ section_title | slugify }}">{{ section_title }}</a>
+        </strong>
+        <div class="compendium-toc__block-list">
+            {% for section_item in section_items %}
+            {% assign item_data = section_item | split: "|" %}
+            {% assign item_title = item_data[0] %}
+            {% assign item_id = item_data[1] %}
+            <div class="compendium-toc__block-item">
+                <a href="#{{ item_id }}">{{ item_title }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% endunless %}
+    {% endfor %}
 </div>
-{% endif %}
+
+<style>
+    .compendium-toc {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+        width: 100%;
+    }
+
+    .compendium-toc__block {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .compendium-toc__block-title {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #e0e6ed;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 0.5rem;
+    }
+
+    .compendium-toc__block-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .compendium-toc__block-title a:hover {
+        color: #4a90e2;
+    }
+
+    .compendium-toc__block-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .compendium-toc__block-item {
+        margin: 0;
+        padding: 0;
+    }
+
+    .compendium-toc__block-item a:hover {
+        color: #4a90e2;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .compendium-toc {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
