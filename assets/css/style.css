@@ -256,6 +256,7 @@ nav a:hover {
         margin-top: 2em;
         border-bottom: 1px solid #bdc3c7;
         padding-bottom: 0.3em;
+        text-align: center;
     }
 
     /* H3 - Подразделы */
@@ -364,7 +365,6 @@ nav a:hover {
 /* Результаты поиска */
 .result {
     display: none;
-    background-color: var(--color-overlay);
     overflow-y: auto;
     z-index: 1000;
 }

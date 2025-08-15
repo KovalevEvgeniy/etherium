@@ -7,6 +7,4 @@ title: Полный компендиум мира Этериума
 
 {% include compendium_toc.html %}
 
----
-
 {% include compendium_content.html %}
