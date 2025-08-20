@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Механические свойства материалов в условиях магического поля
-protected: true
+protect: true
 ---
 
 #### Предисловие

@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Белое королевство
-protected: true
 ---
 
 #### Земля вечной зимы

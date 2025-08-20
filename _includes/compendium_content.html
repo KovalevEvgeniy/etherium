@@ -149,7 +149,7 @@
 ### {{ page.title }}
 
 {% assign content_without_frontmatter = page.content %}
-{{ content_without_frontmatter }}
+{{ content_without_frontmatter | liquify | markdownify }}
 
 ---
 
@@ -246,7 +246,7 @@
 #### {{ page.title }}
 
 {% assign content_without_frontmatter = page.content %}
-{{ content_without_frontmatter }}
+{{ content_without_frontmatter | liquify | markdownify }}
 
 ---
 
@@ -291,7 +291,7 @@
 ##### {{ page.title }}
 
 {% assign content_without_frontmatter = page.content %}
-{{ content_without_frontmatter }}
+{{ content_without_frontmatter | liquify | markdownify }}
 
 ---
 

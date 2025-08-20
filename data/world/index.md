@@ -1,5 +1,5 @@
 ---
 layout: default
 title: Устройство мира
-order: 2
+order: 1
 ---

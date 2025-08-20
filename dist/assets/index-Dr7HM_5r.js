@@ -1,0 +1,1 @@
+import{c as e,o}from"./index-BgAtpXmQ.js";const r={class:"markdown-body"},d="default",_="Силы и влияние",m=3,u={__name:"index",setup(a,{expose:t}){return t({frontmatter:{layout:"default",title:"Силы и влияние",order:3}}),(s,c)=>(o(),e("div",r))}};export{u as default,d as layout,m as order,_ as title};

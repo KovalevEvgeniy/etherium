@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Видения
-protected: true
+protect: true
 ---
 
 #### Видение первое: Танец с божеством

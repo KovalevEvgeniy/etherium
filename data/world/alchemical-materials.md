@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Алхимические материалы
-protected: true
+protect: true
 ---
 
 #### Варианты для защиты от магического старения:

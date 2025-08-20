@@ -20,7 +20,7 @@
 {% endif %}
 {% endfor %}
 
-{% comment %} Создаем собственную сортировку для оглавления - исправленная версия {% endcomment %}
+{% comment %} Создаем собственную сортировку для оглавления {% endcomment %}
 {% assign toc_sections_with_order = "" | split: "" %}
 {% for section in sections %}
 {% assign section_info = "" | split: "" %}
@@ -168,7 +168,7 @@
     {% if section_items.size > 0 %}
     <div class="compendium-toc__block">
         <strong class="compendium-toc__block-title">
-            <a href="#{{ section_title | slugify }}">{{ section_title }}</a>
+            <a href="#{{ section_title | slugify }}">{{ forloop.index }}. {{ section_title }}</a>
         </strong>
         <div class="compendium-toc__block-list">
             {% for section_item in section_items %}
@@ -188,11 +188,17 @@
 
 <style>
     .compendium-toc {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
+        column-count: 3;
+        column-gap: 1rem;
         margin: 1.5rem 0;
         width: 100%;
+    }
+
+    .compendium-toc__block {
+        margin-bottom: 1.5rem;
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid; /* для WebKit/Blink */
+        page-break-inside: avoid;
     }
 
     .compendium-toc__block-title {
@@ -231,7 +237,7 @@
     /* Адаптивность */
     @media (max-width: 768px) {
         .compendium-toc {
-            grid-template-columns: 1fr;
+            column-count: 1;
         }
     }
 </style>
