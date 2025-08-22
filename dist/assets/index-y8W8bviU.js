@@ -1,1 +1,0 @@
-import{c as e,o}from"./index-Ctht6FCA.js";const _={class:"markdown-body"},n="default",r="Волшебник",a={__name:"index",setup(c,{expose:t}){return t({frontmatter:{layout:"default",title:"Волшебник"}}),(s,u)=>(o(),e("div",_))}},i=Object.freeze(Object.defineProperty({__proto__:null,default:a,layout:n,title:r},Symbol.toStringTag,{value:"Module"}));export{i as _};

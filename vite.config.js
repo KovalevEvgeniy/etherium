@@ -10,14 +10,15 @@ export default defineConfig({
             include: [/\.vue$/, /\.md$/] // обрабатываем и .vue, и .md
         }),
         Markdown({
-            // Здесь можно подключать плагины markdown-it
-            // Пример:
-            // markdownItSetup(md) {
-            //   md.use(require('markdown-it-anchor'));
-            // }
             wrapperClasses: 'markdown-body'
         })
     ],
+
+    base: '/etherium/',
+    build: {
+        outDir: 'docs',
+        assetsDir: 'assets'
+    },
 
     resolve: {
         alias: {

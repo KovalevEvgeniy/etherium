@@ -1,0 +1,1 @@
+import{_ as o,c as s,b as t,o as a}from"./index-Dk0GMzHi.js";const r={__name:"Home",setup(c){return(n,e)=>(a(),s("section",null,e[0]||(e[0]=[t("h2",null,"Главная",-1),t("p",{class:"muted"},"Стартовый экран приложения на Vue 3 + Vite + Vue Router.",-1)])))}},u=o(r,[["__scopeId","data-v-5af95760"]]);export{u as default};
