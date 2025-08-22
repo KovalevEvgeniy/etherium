@@ -3,22 +3,15 @@ import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
 import Markdown from 'vite-plugin-vue-markdown';
 
-
-export default defineConfig({
+export default defineConfig(({ command }) => ({
     plugins: [
         vue({
-            include: [/\.vue$/, /\.md$/] // обрабатываем и .vue, и .md
+            include: [/\.vue$/, /\.md$/]
         }),
         Markdown({
             wrapperClasses: 'markdown-body'
         })
     ],
-
-    base: '/etherium/',
-    build: {
-        outDir: 'docs',
-        assetsDir: 'assets'
-    },
 
     resolve: {
         alias: {
@@ -26,8 +19,17 @@ export default defineConfig({
             '@data': fileURLToPath(new URL('./data', import.meta.url))
         }
     },
+
+    // base только для билда
+    base: command === 'build' ? '/etherium/' : '/',
+
+    build: {
+        outDir: 'docs',
+        assetsDir: 'assets'
+    },
+
     server: {
         port: 5151,
         open: true
     }
-});
+}));

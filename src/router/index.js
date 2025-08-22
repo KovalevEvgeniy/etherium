@@ -25,14 +25,13 @@ const mdRoutes = Object.entries(mdModules).map(([path, loader]) => ({
 
 
 const routes = [
-    { path: '/', name: 'home', component: import('@/views/Home.vue') },
-    {
-        path: '/',
-        name: 'home',
-        component: import('@/views/Layout.vue'),
-        children: mdRoutes,
-    },
-    { path: '/all', name: 'all-content', component: import('@/views/AllContent.vue') },
+    // {
+    //     path: '/',
+    //     name: 'home',
+    //     component: import('@/views/Layout.vue'),
+    //     children: mdRoutes,
+    // },
+    { path: '/', name: 'all-content', component: import('@/views/AllContent.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: import('@/views/404.vue') }
 ];
 
