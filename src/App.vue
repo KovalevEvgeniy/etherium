@@ -2,12 +2,7 @@
 	<div class="app">
 		<Background/>
 
-		<header class="header">
-<!--			<nav class="nav">-->
-<!--				<RouterLink to="/">Главная</RouterLink>-->
-<!--				<RouterLink to="/about">О проекте</RouterLink>-->
-<!--			</nav>-->
-		</header>
+		<header class="header"></header>
 
 		<main class="main">
 			<RouterView />

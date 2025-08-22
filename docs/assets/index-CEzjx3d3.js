@@ -1,1 +1,0 @@
-import{c as e,o}from"./index-8gJJou3a.js";const r={class:"markdown-body"},n="default",_="Религия",a=2,c={__name:"index",setup(l,{expose:t}){return t({frontmatter:{layout:"default",title:"Религия",order:2}}),(d,u)=>(o(),e("div",r))}},f=Object.freeze(Object.defineProperty({__proto__:null,default:c,layout:n,order:a,title:_},Symbol.toStringTag,{value:"Module"}));export{f as _};

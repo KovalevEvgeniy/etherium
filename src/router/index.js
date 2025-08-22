@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Home from '@/views/Home.vue'
+import NotFound from '@/views/404.vue'
+
 const mdModules = import.meta.glob('@data/**/*.md');
 
 function filePathToRoutePath(filePath) {
@@ -17,16 +20,14 @@ function filePathToRoutePath(filePath) {
     return '/' + p;
 }
 
-
 const mdRoutes = Object.entries(mdModules).map(([path, loader]) => ({
     path: filePathToRoutePath(path.replace(/\\/g, '/')),
     component: loader
 }));
 
-
 const routes = [
-    { path: '/', name: 'home', component: import('@/views/Home.vue') },
-    { path: '/:pathMatch(.*)*', name: 'not-found', component: import('@/views/404.vue') }
+    { path: '/', name: 'home', component: Home },
+    { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
 ];
 
 const router = createRouter({

@@ -20,7 +20,6 @@ export default defineConfig(({ command }) => ({
         }
     },
 
-    // base только для билда
     base: command === 'build' ? '/etherium/' : '/',
 
     build: {
