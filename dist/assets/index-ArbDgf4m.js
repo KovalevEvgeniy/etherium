@@ -1,1 +1,0 @@
-import{c as e,o}from"./index-BgAtpXmQ.js";const r={class:"markdown-body"},d="default",_="Домашние правила",m=5,u={__name:"index",setup(a,{expose:t}){return t({frontmatter:{layout:"default",title:"Домашние правила",order:5}}),(s,c)=>(o(),e("div",r))}};export{u as default,d as layout,m as order,_ as title};

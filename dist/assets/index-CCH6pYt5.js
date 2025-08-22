@@ -1,1 +1,0 @@
-import{c as e,o}from"./index-BgAtpXmQ.js";const r={class:"markdown-body"},d="default",_="Виды",m=1,u={__name:"index",setup(a,{expose:t}){return t({frontmatter:{layout:"default",title:"Виды",order:1}}),(s,c)=>(o(),e("div",r))}};export{u as default,d as layout,m as order,_ as title};

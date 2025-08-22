@@ -14,21 +14,38 @@
 					<div class="content__list">
 						<template v-for="(child, c) in item.children" :key="child.path">
 							<Island>
-								<div class="content__category" v-if="item.title" :id="item.path">
-									{{ i + 1 }}. {{item.title}}
+								<div class="category content__category" v-if="item.title" :id="item.path">
+									{{ i + 1 }}. {{ item.title }}
 								</div>
-								<div class="content__title">
+								<div class="content__title" :class="{_protected: child.protect}">
 									<h1 v-if="child.title" :id="child.path">{{ child.title }}</h1>
 									<div v-if="child.protect" class="content__protected">
 										(Protected)
 									</div>
 								</div>
-								<component :is="child.comp"/>
+								<div
+									class="content__wrapper"
+									:class="{
+										_hidden: child.protect && !showBlocks.includes(child.path)
+									}"
+									@click=onShowBlock(child.path)
+								>
+									<component :is="child.comp"/>
+								</div>
 
-								<div class="content__list">
-									<template v-for="subchild in child.children" :key="subchild.path">
-										<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
-										<component :is="subchild.comp"/>
+								<div class="content__childrens">
+									<template v-for="(subchild, s) in child.children" :key="subchild.path">
+										<div v-if="s > 0" class="content__separator">✻ ✻ ✻</div>
+										<div
+											class="content__wrapper"
+											:class="{
+												_hidden: subchild.protect && !showBlocks.includes(subchild.path)
+											}"
+											@click=onShowBlock(subchild.path)
+										>
+											<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
+											<component :is="subchild.comp"/>
+										</div>
 									</template>
 								</div>
 							</Island>
@@ -41,7 +58,7 @@
 </template>
 
 <script setup>
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
 import TOC from "@/components/TOC.vue";
 import Island from "@/components/Island.vue";
 
@@ -52,6 +69,17 @@ const mdModules = import.meta.glob('@data/**/*.md', {eager: true});
 const indexContent = computed(() => Object.entries(mdIndex)[0][1].default)
 
 console.log('mdIndex', indexContent.value)
+
+const showBlocks = ref([]);
+
+const onShowBlock = (path) => {
+	console.log('path', path)
+	if (showBlocks.value.includes(path)) {
+		showBlocks.value = showBlocks.value.filter(p => p !== path);
+	} else {
+		showBlocks.value.push(path);
+	}
+}
 
 // Normalize path for ordering (для ключа/сортировки)
 function filePathToSortKey(filePath) {
@@ -221,10 +249,14 @@ const items = computed(() => {
 		align-items flex-start
 		gap 4rem
 
+		@media (max-width: 768px)
+			flex-direction column
+
 	&__body
 		display flex
 		flex-direction column
 		gap 8rem
+		max-width 100%
 
 	&__aside
 		width 300px
@@ -235,6 +267,8 @@ const items = computed(() => {
 		bottom 2rem
 		max-height calc(100dvh - 4rem)
 		overflow-y auto
+		@media (max-width: 768px)
+			width 100%
 
 	&__block
 		display: flex;
@@ -242,8 +276,9 @@ const items = computed(() => {
 		gap: 2rem;
 
 	&__separator
-		font-size 10rem
-		margin 4rem auto
+		font-size 6rem
+		line-height 1
+		margin 12rem auto
 		text-align center
 		color #999
 
@@ -259,20 +294,30 @@ const items = computed(() => {
 		font-size 3rem
 		margin-top -3rem
 		padding-bottom 0.5rem
-		border-bottom 1px solid #ccc
-		color #777
+		border-bottom 1px solid #00000033
+		color #00000055
+		text-transform: uppercase;
 
 	&__title
-		border-bottom: 1px solid #ccc;
+		border-bottom: 1px solid #00000033;
 		margin-bottom: 1em;
 		display flex;
 		justify-content center
 		align-items center
 		gap 1rem
 
+		&._protected
+			color #b11e1e
+
 	&__protected
 		color #b11e1e
 		font-size 3rem
 		margin-top 1.5rem
+
+	&__wrapper
+		transition filter 0.175s ease-in-out
+		&._hidden
+			filter blur(2rem)
+			cursor pointer
 
 </style>
