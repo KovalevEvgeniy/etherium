@@ -25,24 +25,16 @@ const mdRoutes = Object.entries(mdModules).map(([path, loader]) => ({
 
 
 const routes = [
-    // {
-    //     path: '/',
-    //     name: 'home',
-    //     component: import('@/views/Layout.vue'),
-    //     children: mdRoutes,
-    // },
-    { path: '/', name: 'all-content', component: import('@/views/AllContent.vue') },
+    { path: '/', name: 'home', component: import('@/views/Home.vue') },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: import('@/views/404.vue') }
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior() {
         return { top: 0 };
     }
 });
-
-console.log('[Router] Routes:', router.getRoutes().map(r => r.path));
 
 export default router;

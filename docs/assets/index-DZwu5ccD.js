@@ -1,0 +1,1 @@
+import{c as e,o}from"./index-8gJJou3a.js";const _={class:"markdown-body"},n="default",r="Рейнджер",a={__name:"index",setup(c,{expose:t}){return t({frontmatter:{layout:"default",title:"Рейнджер"}}),(s,u)=>(o(),e("div",_))}},i=Object.freeze(Object.defineProperty({__proto__:null,default:a,layout:n,title:r},Symbol.toStringTag,{value:"Module"}));export{i as _};
