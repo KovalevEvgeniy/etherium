@@ -1,5 +1,5 @@
 <template>
-	<img class="img" :src="`/assets/images/${name}`" :alt="alt">
+	<img class="img" :src="`assets/images/${name}`" :alt="alt">
 </template>
 <script setup>
 defineProps({
