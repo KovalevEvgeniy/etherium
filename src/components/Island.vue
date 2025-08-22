@@ -13,4 +13,5 @@
 	padding: 5rem;
 	position: relative;
 	z-index: 1;
+	box-sizing border-box
 </style>

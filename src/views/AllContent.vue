@@ -1,44 +1,57 @@
 <template>
 	<main class="content">
-		<Island>
-			<TOC :items="items"/>
-		</Island>
-		<div v-for="(item, i) in items" :key="item.path" class="content__block">
+		<div class="content__top">
 			<Island>
-				<h1 v-if="item.title" :id="item.path">{{ i + 1 }}. {{ item.title }}</h1>
-				<!--			<component :is="item.comp"/>-->
+				<component :is="indexContent"/>
 			</Island>
-			<Island>
-				<div class="content__list">
-					<template v-for="(child, c) in item.children" :key="child.path">
-						<div
-							v-if="c !== 0"
-							class="content__separator"
-						>* * * * *
-						</div>
-						<h2 v-if="child.title" :id="child.title">{{ child.title }}</h2>
-						<component :is="child.comp"/>
+		</div>
+		<div class="content__main">
+			<Island class="content__aside">
+				<TOC :items="items"/>
+			</Island>
+			<div class="content__body">
+				<div v-for="(item, i) in items" :key="item.path" class="content__block">
+					<div class="content__list">
+						<template v-for="(child, c) in item.children" :key="child.path">
+							<Island>
+								<div class="content__category" v-if="item.title" :id="item.path">
+									{{ i + 1 }}. {{item.title}}
+								</div>
+								<div class="content__title">
+									<h1 v-if="child.title" :id="child.path">{{ child.title }}</h1>
+									<div v-if="child.protect" class="content__protected">
+										(Protected)
+									</div>
+								</div>
+								<component :is="child.comp"/>
 
-						<div class="content__list">
-							<template v-for="subchild in child.children" :key="subchild.path">
-								<h3 v-if="subchild.title" :id="subchild.title">{{ subchild.title }}</h3>
-								<component :is="subchild.comp"/>
-							</template>
-						</div>
-					</template>
+								<div class="content__list">
+									<template v-for="subchild in child.children" :key="subchild.path">
+										<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
+										<component :is="subchild.comp"/>
+									</template>
+								</div>
+							</Island>
+						</template>
+					</div>
 				</div>
-			</Island>
+			</div>
 		</div>
 	</main>
 </template>
 
 <script setup>
 import {computed} from 'vue';
-import TOC from "../components/TOC.vue";
-import Island from "../components/Island.vue";
+import TOC from "@/components/TOC.vue";
+import Island from "@/components/Island.vue";
 
 // Eagerly import all markdown files as Vue components
+const mdIndex = import.meta.glob('@data/index.md', {eager: true});
 const mdModules = import.meta.glob('@data/**/*.md', {eager: true});
+
+const indexContent = computed(() => Object.entries(mdIndex)[0][1].default)
+
+console.log('mdIndex', indexContent.value)
 
 // Normalize path for ordering (для ключа/сортировки)
 function filePathToSortKey(filePath) {
@@ -203,6 +216,26 @@ const items = computed(() => {
 	gap: 4rem;
 	line-height 1.5
 
+	&__main
+		display flex
+		align-items flex-start
+		gap 4rem
+
+	&__body
+		display flex
+		flex-direction column
+		gap 8rem
+
+	&__aside
+		width 300px
+		flex-shrink 0
+		padding-right 2rem
+		position sticky
+		top 2rem
+		bottom 2rem
+		max-height calc(100dvh - 4rem)
+		overflow-y auto
+
 	&__block
 		display: flex;
 		flex-direction: column;
@@ -216,5 +249,30 @@ const items = computed(() => {
 
 	table
 		width 100%
+
+	&__list
+		display flex
+		flex-direction column
+		gap 8rem
+
+	&__category
+		font-size 3rem
+		margin-top -3rem
+		padding-bottom 0.5rem
+		border-bottom 1px solid #ccc
+		color #777
+
+	&__title
+		border-bottom: 1px solid #ccc;
+		margin-bottom: 1em;
+		display flex;
+		justify-content center
+		align-items center
+		gap 1rem
+
+	&__protected
+		color #b11e1e
+		font-size 3rem
+		margin-top 1.5rem
 
 </style>

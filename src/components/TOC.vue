@@ -9,13 +9,13 @@
 			<div class="toc__list">
 				<a
 					v-for="child in item.children" :key="item.path"
-					:href="`#${child.title}`"
+					:href="`#${child.path}`"
 					class="toc__item"
 					:class="{
 						_protect: child.protect,
 					}"
 				>
-					{{ child.title }}
+					- {{ child.title }}
 				</a>
 			</div>
 		</div>
@@ -26,14 +26,14 @@
 defineProps({
 	items: Array,
 })
+
+
 </script>
 
 <style scoped lang="stylus">
 .toc
-	column-count: 3;
-	column-gap: 1rem;
 	width: 100%;
-	line-height: 1.25;
+	line-height: 1;
 
 	&__block
 		break-inside: avoid;
@@ -44,7 +44,7 @@ defineProps({
 	&__list
 		display flex
 		flex-direction column
-		gap 1rem
+		gap 1.5rem
 		padding-left 0rem
 
 	&__item
@@ -52,7 +52,7 @@ defineProps({
 		color #555
 		text-decoration: none
 		font-weight normal
-
+		font-size 3.5rem
 		&._protect
 			color #b11e1e
 

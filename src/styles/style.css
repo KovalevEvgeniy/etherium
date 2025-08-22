@@ -29,7 +29,6 @@ html, body, #app {
 
 .app {
     padding: 2rem;
-    overflow: auto;
 }
 
 .header {
@@ -61,13 +60,18 @@ html, body, #app {
 
 .main {
     position: relative;
-    max-width: 960px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
 }
 
 .muted {
     color: var(--muted);
+}
+
+p, h1, h2, h3, h4, h5 {
+    margin-top: 1em;
+    margin-bottom: .5em;
 }
 
 h1 {
@@ -78,7 +82,6 @@ h1 {
 
 h2 {
     font-size: 7rem;
-    text-align: center;
     margin: 0;
     color: #555;
 }
@@ -91,4 +94,34 @@ h4 {
 }
 h5 {
     font-size: 4rem;
+}
+
+.markdown-body {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+        border-radius: 1rem;
+
+        th,
+        td {
+            padding: 1rem 2rem;
+            line-height: 1.25;
+            border: 1px solid #8eaab5;
+        }
+
+        th {
+            background-color: #bad0d6;
+            text-align: left;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #ffffff88;
+        }
+    }
+
+    code {
+        max-width: 100%;
+        white-space: pre-wrap;
+    }
 }

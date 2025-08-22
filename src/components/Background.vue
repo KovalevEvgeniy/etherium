@@ -15,8 +15,6 @@ function updateMetrics() {
 	// Пытаемся измерять контент по .app; если нет .app — используем прежние измерения
 	const contentEl = document.querySelector('.app');
 
-	console.log('contentEl', contentEl)
-
 	if (useWindowScroll) {
 		const viewportH = window.innerHeight;
 		if (contentEl) {
@@ -106,10 +104,11 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style>
-.background {
+<style lang="stylus" scoped>
+.background
 	background-color: #2c8ca7;
-	background-image: url(/assets/bg.webp);
+	//background-image: url(/assets/bg.webp);
+	background-image: url(/assets/img.png);
 	background-size: 100% auto;
 	background-repeat: no-repeat;
 	background-position: center 0%;
@@ -121,10 +120,5 @@ onBeforeUnmount(() => {
 	top: 0;
 	left: 50%;
 	transform: translateX(-50%);
-	/* Для подхода через background-position: */
 	will-change: background-position;
-	/* Если переключитесь на transform:
-	   will-change: transform;
-	*/
-}
 </style>
