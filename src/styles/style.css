@@ -96,6 +96,9 @@ h2 {
 
 h3 {
     font-size: 6rem;
+    @media (width < 768px) {
+        text-align: center;
+    }
 }
 h4 {
     font-size: 5rem;
@@ -137,6 +140,12 @@ p {
         tr:nth-child(2n) {
             background-color: #ffffff88;
         }
+    }
+
+
+    ol,
+    ul {
+        padding-left: 4rem;
     }
 
     code {

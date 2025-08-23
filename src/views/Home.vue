@@ -317,7 +317,7 @@ const items = computed(() => {
 	&__wrapper
 		transition filter 0.175s ease-in-out
 		&._hidden
-			filter blur(2rem)
+			filter blur(1rem)
 			cursor pointer
 
 </style>

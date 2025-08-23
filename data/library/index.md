@@ -1,6 +1,6 @@
 ---
 layout: default
 title: Библиотека
-order: 99
+order: 5
 protect: true
 ---

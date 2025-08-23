@@ -8,7 +8,10 @@
 				:class="{ _active: activeCategoryId === item.path }"
 			>{{ i + 1 }}. {{ item.title }}</a>
 
-			<div v-if="activeCategoryId === item.path" class="toc__list">
+			<div
+				v-if="activeCategoryId === item.path && item.children.length > 0"
+				class="toc__list"
+			>
 				<template v-for="child in item.children" :key="item.path">
 					<a
 						:href="`#${child.path}`"
@@ -20,7 +23,10 @@
 					>
 						{{ child.title }}
 					</a>
-					<div v-if="activeCategoryId === item.path && child.children?.length > 0" class="toc__sublist">
+					<div
+						v-if="activeCategoryId === item.path && child.children?.length > 0"
+						class="toc__sublist"
+					>
 						<a
 							v-for="subchild in child.children" :key="item.path"
 							:href="`#${subchild.path}`"
@@ -41,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
+import {ref, onMounted, onBeforeUnmount, nextTick, watch} from 'vue';
 
 const props = defineProps({
 	items: Array,
@@ -126,6 +132,7 @@ function onResize() {
 }
 
 const initTime = ref(null);
+
 function init() {
 	measureActive();
 	// Повторная попытка только если в DOM пока нет целевых элементов
@@ -136,7 +143,7 @@ function init() {
 }
 
 onMounted(async () => {
-	window.addEventListener('scroll', onScroll, { passive: true });
+	window.addEventListener('scroll', onScroll, {passive: true});
 	await nextTick();
 	init();
 	window.addEventListener('resize', onResize);
@@ -147,7 +154,7 @@ watch(() => props.items, () => {
 	nextTick().then(() => {
 		requestMeasure();
 	});
-}, { deep: true });
+}, {deep: true});
 
 onBeforeUnmount(() => {
 	window.removeEventListener('scroll', onScroll);
@@ -167,6 +174,7 @@ onBeforeUnmount(() => {
 		-webkit-column-break-inside: avoid;
 		page-break-inside: avoid;
 		margin-bottom: 4rem;
+
 		&:last-child
 			margin-bottom: 0;
 
@@ -179,7 +187,7 @@ onBeforeUnmount(() => {
 		display flex
 		flex-direction column
 		gap 1rem
-		padding-left 3rem
+		padding-left 2rem
 
 	&__item
 	&__subitem
@@ -188,6 +196,7 @@ onBeforeUnmount(() => {
 		text-decoration: none
 		font-weight normal
 		font-size 4rem
+
 		&._protect
 			color #b11e1e
 
@@ -200,6 +209,9 @@ onBeforeUnmount(() => {
 		margin-bottom 1rem
 		text-transform uppercase
 
+	&__item
+		margin-top 2rem
+
 	&__title
 	&__item
 	&__subitem
@@ -208,7 +220,12 @@ onBeforeUnmount(() => {
 
 		&:hover
 			text-decoration underline
+
 		&._active
 			font-weight bold
+			color #000
+
+			&._protect
+				color #b11e1e
 
 </style>

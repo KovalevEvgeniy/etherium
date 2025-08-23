@@ -17,4 +17,5 @@ defineProps({
 	height: auto
 	display: block
 	margin: 0 auto
+	border-radius var(--radius)
 </style>

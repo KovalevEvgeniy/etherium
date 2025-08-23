@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Домен Тени Несущего Свет (Lightbearer’s Shadow Domain)
+title: Жрец. Домен Тени Несущего Свет
 ---
 
 *Где свет встречает тьму*

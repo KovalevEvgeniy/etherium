@@ -14,4 +14,7 @@
 	position: relative;
 	z-index: 1;
 	box-sizing border-box
+
+	@media (max-width: 768px)
+		padding: 3rem
 </style>
