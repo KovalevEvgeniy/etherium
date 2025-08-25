@@ -43,7 +43,7 @@
 									<component :is="child.comp"/>
 								</div>
 
-								<div v-if="child.protect" class="content__protected">
+								<div v-if="child.protect && !showBlocks.includes(child.path)" class="content__protected">
 									Клик для просмотра
 								</div>
 
@@ -64,7 +64,7 @@
 										>
 											<component :is="subchild.comp"/>
 										</div>
-										<div v-if="subchild.protect" class="content__protected">
+										<div v-if="subchild.protect && !showBlocks.includes(subchild.path)" class="content__protected">
 											Клик для просмотра
 										</div>
 										</div>

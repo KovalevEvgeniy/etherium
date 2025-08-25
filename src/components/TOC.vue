@@ -5,7 +5,7 @@
 				v-if="item.title"
 				:href="`#${item.path}`"
 				class="toc__title"
-				:class="{ _active: activeCategoryId === item.path && !top }"
+				:class="{ _active: activeCategoryId === item.path }"
 				@click="onClick"
 			>{{ i + 1 }}. {{ item.title }}</a>
 
@@ -20,7 +20,7 @@
 							toc__item: !!child.children?.length,
 							toc__subitem: !child.children?.length,
 							_protect: child.protect,
-							_active: activeHeadingId?.indexOf(child.path) >= 0  && !top,
+							_active: activeHeadingId?.indexOf(child.path) >= 0,
 						}"
 						@click="onClick"
 					>
@@ -36,7 +36,7 @@
 							class="toc__subitem"
 							:class="{
 								_protect: subchild.protect,
-								_active: activeHeadingId === subchild.path && !top,
+								_active: activeHeadingId === subchild.path,
 							}"
 							@click="onClick"
 						>

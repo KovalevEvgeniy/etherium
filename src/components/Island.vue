@@ -14,6 +14,7 @@
 	position: relative;
 	z-index: 1;
 	box-sizing border-box
+	overflow: hidden;
 
 	@media (max-width: 768px)
 		padding: 3rem
