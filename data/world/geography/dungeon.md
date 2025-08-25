@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Подземелья
 protect: true
 ---

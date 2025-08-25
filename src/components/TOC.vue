@@ -1,30 +1,33 @@
 <template>
-	<nav class="toc">
+	<nav class="toc" :class="{_top: top}">
 		<div v-for="(item, i) in items" :key="item.path" class="toc__block">
 			<a
 				v-if="item.title"
 				:href="`#${item.path}`"
 				class="toc__title"
-				:class="{ _active: activeCategoryId === item.path }"
+				:class="{ _active: activeCategoryId === item.path && !top }"
+				@click="onClick"
 			>{{ i + 1 }}. {{ item.title }}</a>
 
 			<div
-				v-if="activeCategoryId === item.path && item.children.length > 0"
+				v-if="item.children.length > 0 && (activeCategoryId === item.path || top)"
 				class="toc__list"
 			>
-				<template v-for="child in item.children" :key="item.path">
+				<template v-for="(child, c) in item.children" :key="item.path">
 					<a
 						:href="`#${child.path}`"
-						class="toc__item"
 						:class="{
+							toc__item: !!child.children?.length,
+							toc__subitem: !child.children?.length,
 							_protect: child.protect,
-							_active: activeHeadingId.indexOf(child.path) >= 0,
+							_active: activeHeadingId?.indexOf(child.path) >= 0  && !top,
 						}"
+						@click="onClick"
 					>
-						{{ child.title }}
+						{{ i + 1 }}.{{ c + 1}}. {{ child.title }}
 					</a>
 					<div
-						v-if="activeCategoryId === item.path && child.children?.length > 0"
+						v-if="child.children?.length > 0 && (activeCategoryId === item.path || top)"
 						class="toc__sublist"
 					>
 						<a
@@ -33,8 +36,9 @@
 							class="toc__subitem"
 							:class="{
 								_protect: subchild.protect,
-								_active: activeHeadingId === subchild.path,
+								_active: activeHeadingId === subchild.path && !top,
 							}"
+							@click="onClick"
 						>
 							- {{ subchild.title }}
 						</a>
@@ -49,12 +53,19 @@
 <script setup>
 import {ref, onMounted, onBeforeUnmount, nextTick, watch} from 'vue';
 
+const emit = defineEmits(['select']);
+
 const props = defineProps({
 	items: Array,
+	top: {
+		type: Boolean,
+		default: false,
+	}
 });
 
 const activeHeadingId = ref(null);  // ближайший h1[id]
 const activeCategoryId = ref(null); // ближайший .category[id]
+const suppressHashUpdate = ref(true); // подавление обновления хеша во время инициализации
 
 let rAF = null;              // для rAF-троттлинга
 
@@ -108,6 +119,9 @@ function measureActive() {
 
 	if (headingId !== activeHeadingId.value) {
 		activeHeadingId.value = headingId;
+	}
+	// Обновляем URL только когда снята блокировка и есть корректный id
+	if (!suppressHashUpdate.value && headingId) {
 		updateUrlHash(headingId);
 	}
 	if (categoryId !== activeCategoryId.value) {
@@ -133,13 +147,61 @@ function onResize() {
 
 const initTime = ref(null);
 
+function scrollToElementById(id) {
+	try {
+		const el = id ? document.getElementById(id) : null;
+		if (!el) return false;
+		el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+
 function init() {
-	measureActive();
-	// Повторная попытка только если в DOM пока нет целевых элементов
+	// Ждём, пока в DOM появятся нужные элементы
 	const hasContent = getHeadingIds().length > 0 || getCategoryIds().length > 0;
 	if (!hasContent) {
-		initTime.value = setTimeout(init, 1000);
+		initTime.value = setTimeout(init, 100);
+		return;
 	}
+
+	// Если при загрузке есть hash — скроллим к нему и не обновляем URL до стабилизации
+	const hash = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : null;
+	if (hash) {
+		const scrolled = scrollToElementById(hash);
+
+		// Если элемент ещё не найден — повторим позже
+		if (!scrolled) {
+			initTime.value = setTimeout(init, 100);
+			return;
+		}
+
+		// Ждём применения скролла и стабилизации layout, затем проверяем, что активный заголовок совпал с хешем
+		requestAnimationFrame(() => {
+			requestMeasure();
+			const ensureHashActive = () => {
+				if (activeHeadingId.value === hash) {
+					suppressHashUpdate.value = false;
+					requestMeasure();
+				} else {
+					initTime.value = setTimeout(() => {
+						requestMeasure();
+						ensureHashActive();
+					}, 50);
+				}
+			};
+			ensureHashActive();
+		});
+		return;
+	}
+
+	// Если хеша нет — сначала вычисляем активные элементы, затем снимаем блокировку и обновляем URL
+	measureActive();
+	requestAnimationFrame(() => {
+		suppressHashUpdate.value = false;
+		requestMeasure();
+	});
 }
 
 onMounted(async () => {
@@ -162,12 +224,25 @@ onBeforeUnmount(() => {
 	if (rAF) cancelAnimationFrame(rAF);
 	clearTimeout(initTime.value);
 });
+
+const onClick = (e) => {
+	e.preventDefault();
+	const id = e.target.getAttribute('href').slice(1);
+	scrollToElementById(id);
+	emit('select', id);
+};
+
 </script>
 
 <style scoped lang="stylus">
 .toc
 	width: 100%;
 	line-height: 1;
+
+	&._top
+		column-count 4
+		@media (max-width: 768px)
+			column-count 1
 
 	&__block
 		break-inside: avoid;
@@ -182,6 +257,7 @@ onBeforeUnmount(() => {
 		display flex
 		flex-direction column
 		gap 2rem
+		padding-left 2rem
 
 	&__sublist
 		display flex

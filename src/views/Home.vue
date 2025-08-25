@@ -1,7 +1,17 @@
 <template>
 	<main class="content">
+		<Island class="content__toc-btn" @click="onToggleTOC">Оглавление</Island>
 		<div class="content__top">
-			<Island>
+			<Island
+				class="content__toc"
+				:class="{
+					_show: onShowTOC
+				}"
+			>
+				<TOC :items="items" top @select="onCloseTOC"/>
+				<div class="content__toc-close" @click="onCloseTOC">+</div>
+			</Island>
+			<Island v-if="indexHasContent">
 				<component :is="indexContent"/>
 			</Island>
 		</div>
@@ -10,18 +20,18 @@
 				<TOC :items="items"/>
 			</Island>
 			<div class="content__body">
-				<div v-for="(item, i) in items" :key="item.path" class="content__block">
+				<Island v-for="(item, i) in items" :key="item.path" class="content__block">
+					<div class="category content__category" v-if="item.title" :id="item.path">
+						{{ i + 1 }}. {{ item.title }}
+					</div>
 					<div class="content__list">
+						<div v-if="item.hasContent">
+							<component :is="item.comp"/>
+						</div>
 						<template v-for="(child, c) in item.children" :key="child.path">
-							<Island>
-								<div class="category content__category" v-if="item.title" :id="item.path">
-									{{ i + 1 }}. {{ item.title }}
-								</div>
+							<div>
 								<div class="content__title" :class="{_protected: child.protect}">
-									<h1 v-if="child.title" :id="child.path">{{ child.title }}</h1>
-									<div v-if="child.protect" class="content__protected">
-										(Protected)
-									</div>
+									<h1 v-if="child.title" :id="child.path">{{ i + 1 }}.{{ c + 1 }} {{ child.title }}</h1>
 								</div>
 								<div
 									class="content__wrapper"
@@ -33,9 +43,18 @@
 									<component :is="child.comp"/>
 								</div>
 
-								<div class="content__childrens">
-									<template v-for="(subchild, s) in child.children" :key="subchild.path">
+								<div v-if="child.protect" class="content__protected">
+									Клик для просмотра
+								</div>
+
+								<div class="content__children">
+									<div class="content__child" v-for="(subchild, s) in child.children" :key="subchild.path">
 										<div v-if="s > 0" class="content__separator">✻ ✻ ✻</div>
+										<div class="content__title" :class="{_protected: subchild.protect}">
+											<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
+
+										</div>
+										<div class="content__text">
 										<div
 											class="content__wrapper"
 											:class="{
@@ -43,15 +62,18 @@
 											}"
 											@click=onShowBlock(subchild.path)
 										>
-											<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
 											<component :is="subchild.comp"/>
 										</div>
-									</template>
+										<div v-if="subchild.protect" class="content__protected">
+											Клик для просмотра
+										</div>
+										</div>
+									</div>
 								</div>
-							</Island>
+							</div>
 						</template>
 					</div>
-				</div>
+				</Island>
 			</div>
 		</div>
 	</main>
@@ -65,8 +87,15 @@ import Island from "@/components/Island.vue";
 // Eagerly import all markdown files as Vue components
 const mdIndex = import.meta.glob('@data/index.md', {eager: true});
 const mdModules = import.meta.glob('@data/**/*.md', {eager: true});
+// Raw contents of markdown files to detect emptiness
+const mdRawIndex = import.meta.glob('@data/index.md', { as: 'raw', eager: true });
+const mdRaw = import.meta.glob('@data/**/*.md', { as: 'raw', eager: true });
 
 const indexContent = computed(() => Object.entries(mdIndex)[0][1].default)
+const indexHasContent = computed(() => {
+	const raw = Object.entries(mdRawIndex)[0]?.[1] || '';
+	return hasMarkdownBody(raw);
+})
 
 console.log('mdIndex', indexContent.value)
 
@@ -110,6 +139,24 @@ function getFrontmatter(mod) {
 	);
 }
 
+// Удалить фронтматтер и комментарии, чтобы понять есть ли тело markdown
+function stripFrontmatter(raw) {
+	if (!raw) return ''
+	let text = raw.replace(/^\uFEFF?/, '')
+	if (text.startsWith('---')) {
+		const m = text.match(/^---[\s\S]*?\n---\s*\n?/)
+		if (m) {
+			text = text.slice(m[0].length)
+		}
+	}
+	// убрать HTML-комментарии
+	text = text.replace(/<!--[\s\S]*?-->/g, '')
+	return text.trim()
+}
+function hasMarkdownBody(raw) {
+	return stripFrontmatter(raw).length > 0
+}
+
 // Узел дерева
 function makeDirNode(name, fullPath) {
 	return {
@@ -120,6 +167,7 @@ function makeDirNode(name, fullPath) {
 		order: 999999,     // из index.md, если есть
 		protect: false,    // из index.md, если есть
 		comp: null,        // компонент из index.md
+		hasContent: false, // есть ли тело в index.md
 		children: [],      // дочерние узлы
 		key: filePathToSortKey(fullPath.endsWith('/') ? fullPath : fullPath + '/'),
 	};
@@ -137,6 +185,7 @@ function makeFileNode(name, fullPath, comp, fm) {
 		protect: !!fm?.protect,
 		hidden: !!fm?.hidden,
 		comp,
+		hasContent: false,
 		key: filePathToSortKey(fullPath + '.md'),
 	};
 }
@@ -210,11 +259,13 @@ const items = computed(() => {
 			dirNode.protect = !!mod.protect;
 			dirNode.hidden = !!mod.hidden;
 			dirNode.comp = mod.default;
+			dirNode.hasContent = hasMarkdownBody(mdRaw[absPath] || '');
 		} else {
 			const fileName = segments[segments.length - 1];
 			const parentDirSegs = segments.slice(0, -1);
 			const parentDir = getOrCreateDir(root, parentDirSegs);
 			const fileNode = makeFileNode(fileName, rel, mod.default, mod);
+			fileNode.hasContent = hasMarkdownBody(mdRaw[absPath] || '');
 			parentDir.children.push(fileNode);
 		}
 	}
@@ -229,95 +280,14 @@ const items = computed(() => {
 	return root.children;
 });
 
+const onShowTOC = ref(false);
+const onToggleTOC = () => {
+	onShowTOC.value = !onShowTOC.value;
+}
+const onCloseTOC = () => {
+	onShowTOC.value = false;
+}
+
 </script>
 
-
-<style scoped lang="stylus">
-.all-content :deep(h1),
-.all-content :deep(h2),
-.all-content :deep(h3)
-	scroll-margin-top: 80px;
-
-.content
-	display: flex;
-	flex-direction: column;
-	gap: 4rem;
-	line-height 1.5
-
-	&__main
-		display flex
-		align-items flex-start
-		gap 4rem
-
-		@media (max-width: 768px)
-			flex-direction column
-
-	&__body
-		display flex
-		flex-direction column
-		gap 8rem
-		max-width 100%
-
-	&__aside
-		width 300px
-		flex-shrink 0
-		padding-right 2rem
-		position sticky
-		top 2rem
-		bottom 2rem
-		max-height calc(100dvh - 4rem)
-		overflow-y auto
-		@media (max-width: 768px)
-			width 100%
-
-	&__block
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-
-	&__separator
-		font-size 6rem
-		line-height 1
-		margin 12rem auto
-		text-align center
-		color #999
-
-	table
-		width 100%
-
-	&__list
-		display flex
-		flex-direction column
-		gap 8rem
-
-	&__category
-		font-size 3rem
-		margin-top -3rem
-		padding-bottom 0.5rem
-		border-bottom 1px solid #00000033
-		color #00000055
-		text-transform: uppercase;
-
-	&__title
-		border-bottom: 1px solid #00000033;
-		margin-bottom: 1em;
-		display flex;
-		justify-content center
-		align-items center
-		gap 1rem
-
-		&._protected
-			color #b11e1e
-
-	&__protected
-		color #b11e1e
-		font-size 3rem
-		margin-top 1.5rem
-
-	&__wrapper
-		transition filter 0.175s ease-in-out
-		&._hidden
-			filter blur(1rem)
-			cursor pointer
-
-</style>
+<style scoped lang="stylus" src="./home.styl"></style>

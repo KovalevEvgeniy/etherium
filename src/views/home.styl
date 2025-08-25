@@ -1,0 +1,143 @@
+.all-content :deep(h1),
+.all-content :deep(h2),
+.all-content :deep(h3)
+	scroll-margin-top: 80px;
+
+.content
+	display: flex;
+	flex-direction: column;
+	gap: 4rem;
+	line-height 1.5
+
+	&__top
+		display: flex;
+		flex-direction: column;
+		gap: 4rem;
+
+	&__toc
+		@media (max-width: 768px)
+			display none
+			position fixed
+			top 0
+			left 0
+			right 0
+			bottom 0
+			background-color #fff
+			z-index 1000
+			padding 8rem 4rem 4rem
+			overflow-y auto
+			transition all 0.175s ease-in-out
+			&._show
+				display block
+
+
+	&__toc-btn
+		display none
+		@media (max-width: 768px)
+			display block
+			position sticky
+			text-align center
+			top 0
+			z-index 10
+			background #fff
+
+	&__toc-close
+		display none
+		@media (max-width: 768px)
+			display block
+			position fixed
+			top 1rem
+			right 1rem
+			font-size 8rem
+			line-height 1
+			z-index 1001
+			transform rotate(45deg)
+			padding 0 2rem
+
+	&__main
+		display flex
+		align-items flex-start
+		gap 4rem
+
+		@media (max-width: 768px)
+			flex-direction column
+
+	&__body
+		display flex
+		flex-direction column
+		gap 8rem
+		max-width 100%
+
+	&__aside
+		width 300px
+		flex-shrink 0
+		padding-right 2rem
+		position sticky
+		top 2rem
+		bottom 2rem
+		max-height calc(100dvh - 4rem)
+		overflow-y auto
+		@media (max-width: 768px)
+			display none
+
+	&__block
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+
+	&__separator
+		font-size 6rem
+		line-height 1
+		margin 12rem auto
+		text-align center
+		color #999
+
+	table
+		width 100%
+
+	&__list
+		display flex
+		flex-direction column
+		gap 8rem
+
+	&__category
+		font-size 3rem
+		margin-top -3rem
+		padding-bottom 0.5rem
+		border-bottom 1px solid #00000033
+		color #00000055
+		text-transform: uppercase;
+
+	&__title
+		border-bottom: 1px solid #00000033;
+		margin-bottom: 1em;
+		gap 1rem
+		text-align center
+
+		&._protected
+		&._protected *
+			color #b11e1e
+
+	&__protected
+		color #b11e1e
+		font-size 6rem
+		margin-top -2rem
+		margin-bottom 2rem
+		position absolute
+		top 50%
+		left 50%
+		transform translate(-50%, -50%) rotate(-30deg)
+		opacity .8
+		font-weight 900
+		text-align center
+
+	&__wrapper
+		transition filter 0.175s ease-in-out
+		&._hidden
+			filter blur(1rem)
+			cursor pointer
+			max-height 40rem
+			overflow hidden
+
+	&__text
+		position relative

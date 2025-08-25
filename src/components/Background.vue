@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
 	background-repeat: no-repeat;
 	background-position: center 0%;
 	width: 100dvw;
-	max-width: 1440px;
+	max-width: 1920px;
 	min-width: 800px;
 	height: 100dvh;
 	position: fixed;

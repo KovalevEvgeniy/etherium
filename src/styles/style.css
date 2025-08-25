@@ -27,11 +27,7 @@ html, body, #app {
     font-size: 4rem;
 }
 
-.app {
-    @media (width < 768px) {
-        overflow: hidden;
-    }
-}
+.app {}
 
 .header {
     display: flex;
@@ -43,7 +39,7 @@ html, body, #app {
     z-index: 1;
     height: 29vw;
     min-height: 245px;
-    max-height: 420px;
+    max-height: 580px;
 }
 
 .nav {
@@ -85,6 +81,10 @@ h1 {
     text-align: center;
     margin: 4rem 0;
     padding-top: 2rem;
+    @media (width < 768px) {
+        font-size: 7rem;
+        margin: 3rem 0;
+    }
 }
 
 h2 {

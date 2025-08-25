@@ -1,6 +1,6 @@
 ---
-layout: default
 title: Вихревые двигатели
+protect: true
 ---
 
 ### Введение
