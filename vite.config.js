@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
 import Markdown from 'vite-plugin-vue-markdown';
+import linkAttributes from 'markdown-it-link-attributes'
+import attrs from 'markdown-it-attrs'
 
 export default defineConfig(({ command }) => ({
     plugins: [
@@ -9,8 +11,30 @@ export default defineConfig(({ command }) => ({
             include: [/\.vue$/, /\.md$/]
         }),
         Markdown({
-            wrapperClasses: 'markdown-body'
+            wrapperClasses: 'markdown-body',
+            markdownItSetup(md) {
+                md.use(attrs, {
+                    leftDelimiter: '{:',     // поддержка kramdown-стиля "{: ...}"
+                    rightDelimiter: '}',
+                    allowedAttributes: [
+                        'id',
+                        'class',
+                        'target',
+                        'rel'
+                    ]
+                })
+                md.use(linkAttributes, {
+                    matcher(href) {
+                        return /^https?:\/\//.test(href)
+                    },
+                    attrs: {
+                        target: '_blank',
+                        rel: 'noopener'
+                    }
+                })
+            }
         })
+
     ],
 
     resolve: {

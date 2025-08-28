@@ -1,5 +1,5 @@
 ---
 layout: default
 title: География и климат
-order: 3
+order: 5
 ---

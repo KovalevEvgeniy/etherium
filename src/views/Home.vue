@@ -29,44 +29,44 @@
 							<component :is="item.comp"/>
 						</div>
 						<template v-for="(child, c) in item.children" :key="child.path">
-							<div>
+							<div class="content__group">
 								<div class="content__title" :class="{_protected: child.protect}">
-									<h1 v-if="child.title" :id="child.path">{{ i + 1 }}.{{ c + 1 }} {{ child.title }}</h1>
+									<h1 v-if="child.title" :id="child.path">{{ i + 1 }}.{{ c + 1 }} {{
+											child.title
+										}}</h1>
 								</div>
-								<div
-									class="content__wrapper"
-									:class="{
-										_hidden: child.protect && !showBlocks.includes(child.path)
+								<div class="content__text">
+									<div
+										class="content__wrapper"
+										:class="{
+										_hidden: isHiddenProtected(child)
 									}"
-									@click=onShowBlock(child.path)
-								>
-									<component :is="child.comp"/>
-								</div>
-
-								<div v-if="child.protect && !showBlocks.includes(child.path)" class="content__protected">
-									Клик для просмотра
+										@click=onShowBlock(child.path)
+									>
+										<component :is="child.comp"/>
+									</div>
+									<SpoilerText v-if="isHiddenProtected(child)"/>
 								</div>
 
 								<div class="content__children">
-									<div class="content__child" v-for="(subchild, s) in child.children" :key="subchild.path">
+									<div class="content__child" v-for="(subchild, s) in child.children"
+									     :key="subchild.path">
 										<div v-if="s > 0" class="content__separator">✻ ✻ ✻</div>
 										<div class="content__title" :class="{_protected: subchild.protect}">
 											<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
 
 										</div>
 										<div class="content__text">
-										<div
-											class="content__wrapper"
-											:class="{
-												_hidden: subchild.protect && !showBlocks.includes(subchild.path)
+											<div
+												class="content__wrapper"
+												:class="{
+												_hidden: isHiddenProtected(subchild)
 											}"
-											@click=onShowBlock(subchild.path)
-										>
-											<component :is="subchild.comp"/>
-										</div>
-										<div v-if="subchild.protect && !showBlocks.includes(subchild.path)" class="content__protected">
-											Клик для просмотра
-										</div>
+												@click=onShowBlock(subchild.path)
+											>
+												<component :is="subchild.comp"/>
+											</div>
+											<SpoilerText v-if="isHiddenProtected(subchild)"/>
 										</div>
 									</div>
 								</div>
@@ -83,21 +83,20 @@
 import {computed, ref} from 'vue';
 import TOC from "@/components/TOC.vue";
 import Island from "@/components/Island.vue";
+import SpoilerText from "@/components/SpoilerText.vue";
 
 // Eagerly import all markdown files as Vue components
 const mdIndex = import.meta.glob('@data/index.md', {eager: true});
 const mdModules = import.meta.glob('@data/**/*.md', {eager: true});
 // Raw contents of markdown files to detect emptiness
-const mdRawIndex = import.meta.glob('@data/index.md', { as: 'raw', eager: true });
-const mdRaw = import.meta.glob('@data/**/*.md', { as: 'raw', eager: true });
+const mdRawIndex = import.meta.glob('@data/index.md', {as: 'raw', eager: true});
+const mdRaw = import.meta.glob('@data/**/*.md', {as: 'raw', eager: true});
 
 const indexContent = computed(() => Object.entries(mdIndex)[0][1].default)
 const indexHasContent = computed(() => {
 	const raw = Object.entries(mdRawIndex)[0]?.[1] || '';
 	return hasMarkdownBody(raw);
 })
-
-console.log('mdIndex', indexContent.value)
 
 const showBlocks = ref([]);
 
@@ -108,6 +107,10 @@ const onShowBlock = (path) => {
 	} else {
 		showBlocks.value.push(path);
 	}
+}
+
+const isHiddenProtected = (item) => {
+	return item.protect && !showBlocks.value.includes(item.path)
 }
 
 // Normalize path for ordering (для ключа/сортировки)
@@ -150,9 +153,10 @@ function stripFrontmatter(raw) {
 		}
 	}
 	// убрать HTML-комментарии
-	text = text.replace(/<!--[\s\S]*?-->/g, '')
+	text = text.replace( /<!--[\s\S]*?-->/g, '')
 	return text.trim()
 }
+
 function hasMarkdownBody(raw) {
 	return stripFrontmatter(raw).length > 0
 }
