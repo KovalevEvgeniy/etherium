@@ -67,7 +67,19 @@ const activeHeadingId = ref(null);  // ближайший h1[id]
 const activeCategoryId = ref(null); // ближайший .category[id]
 const suppressHashUpdate = ref(true); // подавление обновления хеша во время инициализации
 
+// Стартовые флаги для работы с хешем при загрузке
+const initialHash = ref(null);      // хеш, с которым открыли страницу
+const startupPending = ref(false);  // идёт стартовая инициализация по хешу
+const startupTimer = ref(null);     // таймер повторной попытки старта
+
 let rAF = null;              // для rAF-троттлинга
+
+// Параметры троттлинга: в окне времени выполняем только последний вызов
+let scrollThrottleTimer = null;   // таймер для throttle прокрутки
+const SCROLL_THROTTLE_MS = 200;   // интервал throttle для scroll
+
+// Единый верхний отступ для расчётов и скролла (в пикселях)
+const VIEWPORT_TOP_OFFSET = 150;
 
 function updateUrlHash(id) {
 	try {
@@ -96,7 +108,7 @@ function measureActive() {
 	const categoryIds = getCategoryIds();
 
 	// Верхняя граница области просмотра
-	const containerTop = 100;
+	const containerTop = VIEWPORT_TOP_OFFSET;
 
 	const pickActive = (ids) => {
 		let candidateId = null;
@@ -110,19 +122,27 @@ function measureActive() {
 				candidateId = id;
 			}
 		}
-		// Если ни один элемент ещё не прошёл верх — активным становится самый верхний в документе
-		return candidateId ?? (ids.length ? ids[0] : null);
+		// Если ни один элемент ещё не прошёл верх — активного нет
+		return candidateId ?? null;
 	};
 
 	const headingId = pickActive(headingIds);
 	const categoryId = pickActive(categoryIds);
 
+	console.log('headingId', headingId)
+	console.log('categoryId', categoryId)
+
 	if (headingId !== activeHeadingId.value) {
 		activeHeadingId.value = headingId;
 	}
-	// Обновляем URL только когда снята блокировка и есть корректный id
-	if (!suppressHashUpdate.value && headingId) {
-		updateUrlHash(headingId);
+	// Обновляем URL только когда снята блокировка и завершена стартовая инициализация
+	if (!suppressHashUpdate.value && !startupPending.value) {
+	if (headingId) {
+			updateUrlHash(headingId);
+		} else {
+			// Активного заголовка нет — очищаем хеш
+			updateUrlHash(null);
+		}
 	}
 	if (categoryId !== activeCategoryId.value) {
 		activeCategoryId.value = categoryId;
@@ -138,23 +158,92 @@ function requestMeasure() {
 }
 
 function onScroll() {
-	requestMeasure();
+	// throttle: обрабатываем только один вызов в заданном окне, выполняем в конце окна
+	if (scrollThrottleTimer) return;
+	scrollThrottleTimer = setTimeout(() => {
+		scrollThrottleTimer = null;
+		requestMeasure();
+	}, SCROLL_THROTTLE_MS);
 }
 
 function onResize() {
 	requestMeasure();
 }
 
+// Отслеживаем изменение хеша; во время старта игнорируем, чтобы Safari не сбрасывал хеш
+function onHashChange() {
+	if (startupPending.value) {
+		// Safari может триггерить hashchange очень рано — игнорируем до завершения стартовой инициализации
+		return;
+	}
+	suppressHashUpdate.value = false;
+	// Пересчитать активные элементы после смены хеша
+	requestMeasure();
+}
+
+
 const initTime = ref(null);
 
-function scrollToElementById(id) {
+function scrollToElementById(id, { instant = false, offset = VIEWPORT_TOP_OFFSET } = {}) {
 	try {
 		const el = id ? document.getElementById(id) : null;
 		if (!el) return false;
-		el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+		// Первичная попытка
+		try {
+			el.scrollIntoView({ behavior: instant ? 'auto' : 'smooth', block: 'start' });
+		} catch (e) {
+			// no-op
+		}
+
+		// Фолбэк для Safari / нестандартных контейнеров прокрутки
+		try {
+			const rect = el.getBoundingClientRect();
+			const absoluteTop = window.pageYOffset + rect.top - (offset || 0);
+			const top = Math.max(0, absoluteTop);
+			if (instant) {
+				window.scrollTo(0, top);
+			} else {
+				window.scrollTo({ top, behavior: 'smooth' });
+			}
+		} catch (e) {
+			// no-op
+		}
 		return true;
 	} catch (e) {
 		return false;
+	}
+}
+
+// Повторные попытки проскроллить к стартовому хешу, если контент ещё не доступен
+function tryStartupScroll() {
+	if (!startupPending.value) return;
+
+	const id = initialHash.value;
+	if (!id) {
+		// Хеша нет — выходим из стартового режима
+		startupPending.value = false;
+		suppressHashUpdate.value = false;
+		return;
+	}
+
+	const el = document.getElementById(id);
+	if (el) {
+		// Надёжный скролл к стартовому элементу с учётом Safari
+		scrollToElementById(id, { instant: true, offset: VIEWPORT_TOP_OFFSET });
+
+		// Ждём стабилизации layout, затем один раз меряем и разрешаем обновления хеша
+		requestAnimationFrame(() => {
+			requestMeasure();
+			requestAnimationFrame(() => {
+				startupPending.value = false;
+				suppressHashUpdate.value = false;
+				requestMeasure();
+			});
+		});
+	} else {
+		// Элемента ещё нет — пробуем позже
+		startupTimer.value = setTimeout(tryStartupScroll, 250);
 	}
 }
 
@@ -166,37 +255,17 @@ function init() {
 		return;
 	}
 
-	// Если при загрузке есть hash — скроллим к нему и не обновляем URL до стабилизации
-	const hash = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : null;
-	if (hash) {
-		const scrolled = scrollToElementById(hash);
+	// Сохраняем стартовый хеш, если он есть
+	initialHash.value = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : null;
 
-		// Если элемент ещё не найден — повторим позже
-		if (!scrolled) {
-			initTime.value = setTimeout(init, 100);
-			return;
-		}
-
-		// Ждём применения скролла и стабилизации layout, затем проверяем, что активный заголовок совпал с хешем
-		requestAnimationFrame(() => {
-			requestMeasure();
-			const ensureHashActive = () => {
-				if (activeHeadingId.value === hash) {
-					suppressHashUpdate.value = false;
-					requestMeasure();
-				} else {
-					initTime.value = setTimeout(() => {
-						requestMeasure();
-						ensureHashActive();
-					}, 50);
-				}
-			};
-			ensureHashActive();
-		});
+	if (initialHash.value) {
+		// Запускаем стартовую инициализацию с повторными попытками
+		startupPending.value = true;
+		tryStartupScroll();
 		return;
 	}
 
-	// Если хеша нет — сначала вычисляем активные элементы, затем снимаем блокировку и обновляем URL
+	// Без стартового хеша: вычисляем активные элементы, затем разрешаем обновление URL
 	measureActive();
 	requestAnimationFrame(() => {
 		suppressHashUpdate.value = false;
@@ -206,6 +275,7 @@ function init() {
 
 onMounted(async () => {
 	window.addEventListener('scroll', onScroll, {passive: true});
+	window.addEventListener('hashchange', onHashChange);
 	await nextTick();
 	init();
 	window.addEventListener('resize', onResize);
@@ -215,93 +285,33 @@ onMounted(async () => {
 watch(() => props.items, () => {
 	nextTick().then(() => {
 		requestMeasure();
+		if (startupPending.value) {
+			tryStartupScroll();
+		}
 	});
 }, {deep: true});
 
 onBeforeUnmount(() => {
 	window.removeEventListener('scroll', onScroll);
 	window.removeEventListener('resize', onResize);
+	window.removeEventListener('hashchange', onHashChange);
 	if (rAF) cancelAnimationFrame(rAF);
+	if (scrollThrottleTimer) clearTimeout(scrollThrottleTimer);
 	clearTimeout(initTime.value);
+	if (startupTimer.value) clearTimeout(startupTimer.value);
 });
+
 
 const onClick = (e) => {
 	e.preventDefault();
 	const id = e.target.getAttribute('href').slice(1);
 	scrollToElementById(id);
+	// При явном выборе пользователем завершаем стартовую фазу
+	startupPending.value = false;
+	suppressHashUpdate.value = false;
 	emit('select', id);
 };
 
 </script>
 
-<style scoped lang="stylus">
-.toc
-	width: 100%;
-	line-height: 1;
-
-	&._top
-		column-count 4
-		@media (max-width: 768px)
-			column-count 1
-
-	&__block
-		break-inside: avoid;
-		-webkit-column-break-inside: avoid;
-		page-break-inside: avoid;
-		margin-bottom: 4rem;
-
-		&:last-child
-			margin-bottom: 0;
-
-	&__list
-		display flex
-		flex-direction column
-		gap 2rem
-		padding-left 2rem
-
-	&__sublist
-		display flex
-		flex-direction column
-		gap 1rem
-		padding-left 2rem
-
-	&__item
-	&__subitem
-		display: block;
-		color #555
-		text-decoration: none
-		font-weight normal
-		font-size 4rem
-
-		&._protect
-			color #b11e1e
-
-	&__subitem
-		font-size 3.5rem
-
-	&__title
-		display block
-		color #000
-		margin-bottom 1rem
-		text-transform uppercase
-
-	&__item
-		margin-top 2rem
-
-	&__title
-	&__item
-	&__subitem
-		text-decoration: none
-		transition: color 0.2s ease-in-out, margin-left 0.2s ease-in-out
-
-		&:hover
-			text-decoration underline
-
-		&._active
-			font-weight bold
-			color #000
-
-			&._protect
-				color #b11e1e
-
-</style>
+<style scoped lang="stylus" src="./toc.styl"></style>
