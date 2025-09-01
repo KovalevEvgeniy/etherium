@@ -44,7 +44,7 @@ export default defineConfig(({ command }) => ({
         }
     },
 
-    base: command === 'build' ? '/etherium/' : '/',
+    // base: command === 'build' ? '/etherium/' : '/',
 
     build: {
         outDir: 'docs',
