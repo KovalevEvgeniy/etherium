@@ -79,7 +79,8 @@ let scrollThrottleTimer = null;   // таймер для throttle прокрут
 const SCROLL_THROTTLE_MS = 200;   // интервал throttle для scroll
 
 // Единый верхний отступ для расчётов и скролла (в пикселях)
-const VIEWPORT_TOP_OFFSET = 150;
+const VIEWPORT_TOP_OFFSET = 30;
+const VIEWPORT_TOP_AREA = 350;
 
 function updateUrlHash(id) {
 	try {
@@ -108,7 +109,7 @@ function measureActive() {
 	const categoryIds = getCategoryIds();
 
 	// Верхняя граница области просмотра
-	const containerTop = VIEWPORT_TOP_OFFSET;
+	const containerTop = VIEWPORT_TOP_AREA;
 
 	const pickActive = (ids) => {
 		let candidateId = null;
@@ -128,9 +129,6 @@ function measureActive() {
 
 	const headingId = pickActive(headingIds);
 	const categoryId = pickActive(categoryIds);
-
-	console.log('headingId', headingId)
-	console.log('categoryId', categoryId)
 
 	if (headingId !== activeHeadingId.value) {
 		activeHeadingId.value = headingId;
