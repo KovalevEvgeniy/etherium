@@ -5,7 +5,7 @@
     --fg: #e7e9ee;
     --link: #205695;
     --muted: #9aa3b2;
-    --color-bg-content: rgba(232, 230, 225, 0.75);
+    --color-bg-content: rgba(232, 230, 225, 0.9);
     --radius: 2rem;
 
     /* Magic colors */
@@ -73,7 +73,7 @@ html, body, #app {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 4rem;
+    padding: 16rem 8rem;
     @media (width < 768px) {
         padding: 2rem;
     }

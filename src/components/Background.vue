@@ -34,8 +34,10 @@ const scrollPercent = computed(() => {
 });
 
 const parallaxStyle = computed(() => {
+	const blur = Math.min(scrollPercent.value / 20, 3)
 	return {
 		backgroundPosition: `center ${scrollPercent.value}%`,
+		filter: `blur(${blur}px)`
 	};
 });
 

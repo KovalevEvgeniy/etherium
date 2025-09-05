@@ -2,6 +2,7 @@
 layout: default
 title: Высказывания
 order: 4
+hidden: true
 ---
 
 _"Имперский стыд"_
