@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Бестиарий
-order: 3
+order: 4
 ---

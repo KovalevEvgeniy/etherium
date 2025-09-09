@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Виды существ
 order: 2
 ---
