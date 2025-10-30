@@ -192,4 +192,11 @@ code {
         max-width: 100%;
         white-space: pre-wrap;
     }
+
+    blockquote {
+        margin: 0;
+        padding: 1rem 0 1rem 2rem;
+        border-left: 1rem solid #b11e1e;
+        background: var(--color-bg-content);
+    }
 }

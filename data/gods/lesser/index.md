@@ -1,5 +1,5 @@
 ---
 layout: default
 title: Мелкие боги
-order: 3
+order: 4
 ---

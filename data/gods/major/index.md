@@ -1,5 +1,5 @@
 ---
 layout: default
 title: Старшие боги
-order: 1
+order: 2
 ---
