@@ -36,6 +36,9 @@
 		font-weight normal
 		font-size 4rem
 
+		&._legacy
+			color var(--color-legacy)
+
 		&._protect
 			color #b11e1e
 
@@ -47,6 +50,13 @@
 		color #000
 		margin-bottom 1rem
 		text-transform uppercase
+		&._legacy
+			color var(--color-legacy)
+
+	&__legacy
+		color var(--color-legacy)
+		text-transform lowercase
+		font-size .9em
 
 	&__item
 		margin-top 2rem
@@ -66,3 +76,34 @@
 
 			&._protect
 				color #b11e1e
+
+	&__to-top
+		display block
+		height 6rem
+		margin-top -2rem
+		margin-bottom 2rem
+		position relative
+		background rgba(0, 0, 0, 0)
+		cursor pointer
+		transition: background 0.2s ease-in-out
+
+		&:before
+			content ''
+			display block
+			height 10px
+			width 10px
+			border-top 2px solid var(--link)
+			border-right 2px solid var(--link)
+			position absolute
+			top 40%
+			left 50%
+			transform: rotate(-45deg) translate(-50%, -50%)
+			transition: border-color 0.2s ease-in-out
+
+		&:hover
+			background rgba(0, 0, 0, 0.05)
+			&:before
+				border-color #000
+
+
+

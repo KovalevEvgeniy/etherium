@@ -120,6 +120,9 @@
 
 	&__wrapper
 		transition filter 0.175s ease-in-out
+
+	&__wrapper
+	&__list
 		&._hidden
 			filter blur(1rem)
 			cursor pointer
@@ -129,3 +132,9 @@
 	&__group
 	&__text
 		position relative
+
+	&__child
+		&._legacy
+			color var(--color-legacy)
+			h2
+				color var(--color-legacy)

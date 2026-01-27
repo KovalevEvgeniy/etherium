@@ -1,11 +1,19 @@
 <template>
 	<span class="spoiler-text">
-		Осторожно споилер!
+		<template v-if="!legacy">
+			Осторожно споилер!
+		</template>
 		<span class="spoiler-text__desc">Клик для просмотра</span>
 	</span>
 </template>
 
 <script setup>
+defineProps({
+	legacy: {
+		type: Boolean,
+		default: false
+	}
+})
 </script>
 
 <style scoped lang="stylus">

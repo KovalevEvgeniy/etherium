@@ -1,16 +1,20 @@
 <template>
-	<nav class="toc" :class="{_top: top}">
+	<nav class="toc" :class="{_top: top}" :id="top ? 'toc-top' : 'toc'">
+		<div v-if="!top" class="toc__to-top" @click="toTop"></div>
 		<div v-for="(item, i) in items" :key="item.path" class="toc__block">
 			<a
 				v-if="item.title"
 				:href="`#${item.path}`"
 				class="toc__title"
-				:class="{ _active: activeCategoryId === item.path }"
+				:class="{
+					_active: activeCategoryId === item.path,
+					_legacy: item.legacy,
+				}"
 				@click="onClick"
-			>{{ i + 1 }}. {{ item.title }}</a>
+			>{{ i + 1 }}. {{ item.title }} <span class="toc__legacy" v-if="item.legacy">(legacy)</span></a>
 
 			<div
-				v-if="item.children.length > 0 && (activeCategoryId === item.path || top)"
+				v-if="item.children.length > 0 && (activeCategoryId === item.path || top) && (!item.legacy || !top)"
 				class="toc__list"
 			>
 				<template v-for="(child, c) in item.children" :key="item.path">
@@ -20,11 +24,12 @@
 							toc__item: !!child.children?.length,
 							toc__subitem: !child.children?.length,
 							_protect: child.protect,
+							_legacy: child.legacy,
 							_active: activeHeadingId?.indexOf(child.path) >= 0,
 						}"
 						@click="onClick"
 					>
-						{{ i + 1 }}.{{ c + 1}}. {{ child.title }}
+						{{ i + 1 }}.{{ c + 1 }}. {{ child.title }} <span class="toc__legacy" v-if="child.legacy">(legacy)</span>
 					</a>
 					<div
 						v-if="child.children?.length > 0 && (activeCategoryId === item.path || top)"
@@ -36,11 +41,12 @@
 							class="toc__subitem"
 							:class="{
 								_protect: subchild.protect,
+								_legacy: subchild.legacy,
 								_active: activeHeadingId === subchild.path,
 							}"
 							@click="onClick"
 						>
-							- {{ subchild.title }}
+							- {{ subchild.title }} <span class="toc__legacy" v-if="subchild.legacy">(legacy)</span>
 						</a>
 					</div>
 				</template>
@@ -135,7 +141,7 @@ function measureActive() {
 	}
 	// Обновляем URL только когда снята блокировка и завершена стартовая инициализация
 	if (!suppressHashUpdate.value && !startupPending.value) {
-	if (headingId) {
+		if (headingId) {
 			updateUrlHash(headingId);
 		} else {
 			// Активного заголовка нет — очищаем хеш
@@ -182,14 +188,14 @@ function onHashChange() {
 
 const initTime = ref(null);
 
-function scrollToElementById(id, { instant = false, offset = VIEWPORT_TOP_OFFSET } = {}) {
+function scrollToElementById(id, {instant = false, offset = VIEWPORT_TOP_OFFSET} = {}) {
 	try {
 		const el = id ? document.getElementById(id) : null;
 		if (!el) return false;
 
 		// Первичная попытка
 		try {
-			el.scrollIntoView({ behavior: instant ? 'auto' : 'smooth', block: 'start' });
+			el.scrollIntoView({behavior: instant ? 'auto' : 'smooth', block: 'start'});
 		} catch (e) {
 			// no-op
 		}
@@ -202,7 +208,7 @@ function scrollToElementById(id, { instant = false, offset = VIEWPORT_TOP_OFFSET
 			if (instant) {
 				window.scrollTo(0, top);
 			} else {
-				window.scrollTo({ top, behavior: 'smooth' });
+				window.scrollTo({top, behavior: 'smooth'});
 			}
 		} catch (e) {
 			// no-op
@@ -228,7 +234,7 @@ function tryStartupScroll() {
 	const el = document.getElementById(id);
 	if (el) {
 		// Надёжный скролл к стартовому элементу с учётом Safari
-		scrollToElementById(id, { instant: true, offset: VIEWPORT_TOP_OFFSET });
+		scrollToElementById(id, {instant: true, offset: VIEWPORT_TOP_OFFSET});
 
 		// Ждём стабилизации layout, затем один раз меряем и разрешаем обновления хеша
 		requestAnimationFrame(() => {
@@ -309,6 +315,10 @@ const onClick = (e) => {
 	suppressHashUpdate.value = false;
 	emit('select', id);
 };
+
+const toTop = () => {
+	scrollToElementById('toc-top');
+}
 
 </script>
 

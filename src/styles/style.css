@@ -20,6 +20,7 @@
     --color-emerald: #007c71;
     --color-green: #2ec650;
     --color-dark: #481883;
+    --color-legacy: #928000;
 }
 
 * { box-sizing: border-box; }

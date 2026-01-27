@@ -1,8 +1,11 @@
 <template>
 	<div></div>
-	<div class="color-box" :style="{
-	backgroundColor: `var(--color-${color})`
-}">
+	<div
+		class="color-box"
+		:style="{
+			backgroundColor: `var(--color-${color})`
+		}"
+	>
 		<div class="color-box__text">
 			<slot/>
 		</div>

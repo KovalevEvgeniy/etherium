@@ -22,9 +22,15 @@
 			<div class="content__body">
 				<Island v-for="(item, i) in items" :key="item.path" class="content__block">
 					<div class="category content__category" v-if="item.title" :id="item.path">
-						{{ i + 1 }}. {{ item.title }}
+						{{ i + 1 }}. {{ item.title }} <template v-if="item.legacy">(legacy)</template>
 					</div>
-					<div class="content__list">
+					<div
+						class="content__list"
+						:class="{
+							_hidden: isHiddenProtected(item)
+						}"
+						@click=onShowBlock(item.path)
+					>
 						<div v-if="item.hasContent">
 							<component :is="item.comp"/>
 						</div>
@@ -39,21 +45,28 @@
 									<div
 										class="content__wrapper"
 										:class="{
-										_hidden: isHiddenProtected(child)
-									}"
+											_hidden: isHiddenProtected(child)
+										}"
 										@click=onShowBlock(child.path)
 									>
 										<component :is="child.comp"/>
 									</div>
-									<SpoilerText v-if="isHiddenProtected(child)"/>
+									<SpoilerText v-if="isHiddenProtected(child)"  :legacy="child.legacy"/>
 								</div>
 
 								<div class="content__children">
-									<div class="content__child" v-for="(subchild, s) in child.children"
-									     :key="subchild.path">
+									<div
+										class="content__child"
+										v-for="(subchild, s) in child.children"
+										:class="{_legacy: subchild.legacy}"
+										:key="subchild.path"
+									>
 										<div v-if="s > 0" class="content__separator">✻ ✻ ✻</div>
 										<div class="content__title" :class="{_protected: subchild.protect}">
-											<h2 v-if="subchild.title" :id="subchild.path">{{ subchild.title }}</h2>
+											<h2 v-if="subchild.title" :id="subchild.path">
+												{{ subchild.title }}
+												<template v-if="subchild.legacy">(legacy)</template>
+											</h2>
 
 										</div>
 										<div class="content__text">
@@ -66,13 +79,15 @@
 											>
 												<component :is="subchild.comp"/>
 											</div>
-											<SpoilerText v-if="isHiddenProtected(subchild)"/>
+											<SpoilerText v-if="isHiddenProtected(subchild)" :legacy="subchild.legacy"/>
 										</div>
 									</div>
 								</div>
 							</div>
 						</template>
+
 					</div>
+					<SpoilerText v-if="isHiddenProtected(item)"  :legacy="item.legacy"/>
 				</Island>
 			</div>
 		</div>
@@ -101,7 +116,6 @@ const indexHasContent = computed(() => {
 const showBlocks = ref([]);
 
 const onShowBlock = (path) => {
-	console.log('path', path)
 	if (showBlocks.value.includes(path)) {
 		showBlocks.value = showBlocks.value.filter(p => p !== path);
 	} else {
@@ -110,7 +124,7 @@ const onShowBlock = (path) => {
 }
 
 const isHiddenProtected = (item) => {
-	return item.protect && !showBlocks.value.includes(item.path)
+	return (item.protect || item.legacy) && !showBlocks.value.includes(item.path)
 }
 
 // Normalize path for ordering (для ключа/сортировки)
@@ -188,6 +202,7 @@ function makeFileNode(name, fullPath, comp, fm) {
 		order,
 		protect: !!fm?.protect,
 		hidden: !!fm?.hidden,
+		legacy: !!fm?.legacy,
 		comp,
 		hasContent: false,
 		key: filePathToSortKey(fullPath + '.md'),
@@ -210,24 +225,26 @@ function getOrCreateDir(root, segments, accPath = '') {
 
 // Сортировка детей: сначала по order, затем по title/name, затем dirs перед files
 function sortChildren(node) {
-	node.children.sort((a, b) => {
-		// dirs вверх
-		if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
+	node.children
+		.sort((a, b) => {
+			// dirs вверх
+			if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
 
-		// order (для dir — из index.md, если есть, иначе 999999)
-		const ao = Number.isFinite(+a.order) ? +a.order : 999999;
-		const bo = Number.isFinite(+b.order) ? +b.order : 999999;
-		if (ao !== bo) return ao - bo;
+			// order (для dir — из index.md, если есть, иначе 999999)
+			const ao = Number.isFinite(+a.order) ? +a.order : 999999;
+			const bo = Number.isFinite(+b.order) ? +b.order : 999999;
+			if (ao !== bo) return ao - bo;
 
-		// заголовок/имя
-		const at = (a.title || a.name || '').toLowerCase();
-		const bt = (b.title || b.name || '').toLowerCase();
-		if (at < bt) return -1;
-		if (at > bt) return 1;
+			// заголовок/имя
+			const at = (a.title || a.name || '').toLowerCase();
+			const bt = (b.title || b.name || '').toLowerCase();
+			if (at < bt) return -1;
+			if (at > bt) return 1;
 
-		// ключ как стабильный фолбэк
-		return (a.key || '').localeCompare(b.key || '');
-	});
+			// ключ как стабильный фолбэк
+			return (a.key || '').localeCompare(b.key || '');
+		})
+		.sort((a, b) => Number(a.legacy) - Number(b.legacy));
 
 	// рекурсивно
 	for (const child of node.children) {
@@ -262,6 +279,7 @@ const items = computed(() => {
 			dirNode.order = Number.isFinite(+mod.order) ? +mod.order : dirNode.order;
 			dirNode.protect = !!mod.protect;
 			dirNode.hidden = !!mod.hidden;
+			dirNode.legacy = !!mod.legacy;
 			dirNode.comp = mod.default;
 			dirNode.hasContent = hasMarkdownBody(mdRaw[absPath] || '');
 		} else {
