@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue'
 import NotFound from '@/views/404.vue'
+import Timeline from '@/views/Timeline.vue'
 
 const mdModules = import.meta.glob('@data/**/*.md');
 
@@ -27,6 +28,7 @@ const mdRoutes = Object.entries(mdModules).map(([path, loader]) => ({
 
 const routes = [
     { path: '/', name: 'home', component: Home },
+    { path: '/timeline', name: 'timeline', component: Timeline },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
 ];
 
