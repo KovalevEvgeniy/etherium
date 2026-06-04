@@ -1,5 +1,8 @@
 <template>
-	<main class="content">
+
+	<Background/>
+	<header class="header"></header>
+	<main class="main content">
 		<Island class="content__toc-btn" @click="onToggleTOC">Оглавление</Island>
 		<div class="content__top">
 			<Island
@@ -99,6 +102,7 @@ import {computed, ref} from 'vue';
 import TOC from "@/components/TOC.vue";
 import Island from "@/components/Island.vue";
 import SpoilerText from "@/components/SpoilerText.vue";
+import Background from "@/components/Background.vue";
 
 // Eagerly import all markdown files as Vue components
 const mdIndex = import.meta.glob('@data/index.md', {eager: true});
