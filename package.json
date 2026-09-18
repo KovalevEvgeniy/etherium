@@ -4,9 +4,9 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"predev": "node ../scripts/sync-timelines.mjs",
+		"predev": "node ../scripts/sync-timelines.mjs && node ../scripts/sync-characters.mjs",
 		"dev": "vite",
-		"prebuild": "node ../scripts/sync-timelines.mjs",
+		"prebuild": "node ../scripts/sync-timelines.mjs && node ../scripts/sync-characters.mjs",
 		"build": "vite build",
 		"preview": "vite preview --open"
 	},
